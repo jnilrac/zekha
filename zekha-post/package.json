@@ -9,8 +9,11 @@
     "antd": "^4.23.0",
     "craco-less": "^2.0.0",
     "firebase": "^9.9.4",
+    "openai": "^3.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-papaparse": "^4.1.0",
+    "react-quill": "^2.0.0",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"

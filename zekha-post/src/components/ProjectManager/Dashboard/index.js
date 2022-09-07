@@ -1,8 +1,11 @@
 import React from 'react'
+import ProjectsArea from './ProjectsArea'
 
 const Dashboard = () => {
   return (
-    <div>Dashboard</div>
+    <>
+      <ProjectsArea />
+    </>
   )
 }
 
