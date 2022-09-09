@@ -49,8 +49,7 @@ return (
         textAlign: 'center',
       }}
     >
-      Ant Design ©2018 Created by Ant UED
-    </Footer>
+      Zekha Post ©2018 Created by Demotic    </Footer>
   </Layout>
 );
 }

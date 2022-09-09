@@ -17,7 +17,7 @@ const Project = () => {
     <Row justify='center'>
       <Col style={{height:"95vh", backgroundColor:"white", padding:20, borderRadius:20}} span={24}>
       <Tabs
-      style={{ height:"100%"}}
+      style={{ height:"100%", overflow:"hidden"}}
     defaultActiveKey="1"
     onChange={onChange}
     items={[
