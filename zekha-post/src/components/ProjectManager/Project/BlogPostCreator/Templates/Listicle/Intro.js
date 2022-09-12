@@ -6,7 +6,11 @@ const Intro = (props) => {
   const [inputValue, setInputValue] = useState(1);
   const {title} = template;
 
+  const handleUpdate = (event, eventType) => {
+    if (eventType === 'problem') setTemplate(draft => {draft.intro.problem = event})
+    else if (eventType === 'introBenefit') setTemplate(draft => {draft.intro.introBenefit = event})
 
+  };
 
   return (
     <>
@@ -16,14 +20,14 @@ const Intro = (props) => {
                 label="Problem"
                 name="problem"
                 >
-                    <Input onChange={(e) => setTemplate(template => ({...template, intro: {...template.intro, problem:e.target.value}}))}/>
+                    <Input onChange={(e) => { handleUpdate(e.target.value, 'problem')}}/>
             </Form.Item>
 
             <Form.Item
                 label="Intro Benefit"
                 name="introBenefit"
                 >
-                    <Input onChange={(e) => setTemplate(template => ({...template, intro: {...template.intro, introBenefit:e.target.value}}))}/>
+                    <Input onChange={(e) => { handleUpdate(e.target.value, 'introBenefit')}}/>
             </Form.Item>
         
         

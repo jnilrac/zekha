@@ -25,7 +25,7 @@ const TemplateCard = (props) => {
     <Card title={props.item.title}>{props.item.content}</Card>
     </List.Item>
       <Drawer
-      destroyOnClose={true}
+        destroyOnClose
         title="Create a new account"
         width={"100%"}
         onClose={onClose}

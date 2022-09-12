@@ -1,67 +1,51 @@
-import React, {useState, useEffect} from 'react'
+import React, {useCallback} from 'react';
+import {useImmer} from 'use-immer';
 import {Form, InputNumber, Row, Col, Slider, Input, Space} from 'antd';
+
 
 const Title = (props) => {
   const [template, setTemplate] = props.state;
-  const [inputValue, setInputValue] = useState(1);
+  
   const {title} = template;
 
+  const handleUpdate = (event, eventType) => {
+    if (eventType === 'topic') setTemplate(draft => {draft.title.topic = event})
+    else if (eventType === 'benefit') setTemplate(draft => {draft.title.benefit = event})
+    else if (eventType === 'timePeriod') setTemplate(draft => {draft.title.timePeriod = event})
+    else if (eventType === 'heroImage') setTemplate(draft => {draft.title.heroImage = event})
+  };
 
+ 
 
   return (
     <>
-      
-                <Form.Item
-                label='List Item Quantity:'
-                name='listQuantity'
-                >
-                    <Row>
-                        <Col span={6}>
-                            <Slider
-                            min={1}
-                            max={20}
-                            onChange={(e) => setTemplate(template => ({...template, title: {...template.title, listQuantity:e}}))}
-                            value={template.title.listQuantity}
-                            />
-                    
-                        </Col>
-                        <Col span={6}>
-                            <InputNumber
-                            disabled={true}
-                            min={1}
-                            max={20}
-                            style={{
-                                margin: '0 16px',
-                            }}
-                            value={template.title.listQuantity}
-                            onChange={(e) => setTemplate(template => ({...template, title: {...template.title, listQuantity:e}}))}
-                            />
-                        </Col>
-                    </Row>
-            </Form.Item>
-
-       
         <Input.Group>
         
             <Form.Item
                 label="Topic"
                 name="topic"
                 >
-                    <Input onChange={(e) => setTemplate(template => ({...template, title: {...template.title, topic:e.target.value}}))}/>
+                    <Input onChange={(e) => {handleUpdate(e.target.value, "topic")}}/>
             </Form.Item>
 
             <Form.Item
                 label="Benefit"
                 name="benefit"
                 >
-                    <Input onChange={(e) => setTemplate(template => ({...template, title: {...template.title, benefit:e.target.value}}))}/>
+                    <Input onChange={(e) => {handleUpdate(e.target.value, "benefit")}}/>
             </Form.Item>
 
             <Form.Item
                 label="Time Period"
                 name="timePeriod"
                 >
-                    <Input onChange={(e) => setTemplate(template => ({...template, title: {...template.title, timePeriod:e.target.value}}))}/>
+                    <Input onChange={(e) => {handleUpdate(e.target.value, "timePeriod")}}/>
+            </Form.Item>
+            <Form.Item
+                label="Hero Image"
+                name="heroImage"
+                >
+                    <Input onChange={(e) => {handleUpdate(e.target.value, "heroImage")}}/>
             </Form.Item>
         
         
