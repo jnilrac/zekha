@@ -82,20 +82,21 @@ const Listicle = (props) => {
     : null
   };
 
+   
  
   return (
     <>
        <Steps current={step}>
-          <Step title="Create Title" description="This is a description." />
-          <Step title="In Progress" subTitle="Left 00:00:08" description="This is a description." />
-          <Step title="Waiting" description="This is a description." />
+          <Step title="Create Post Title" description="Piece together your title by filling out the fields." />
+          <Step title="Create Post Intro"  description="Create your post introdution here." />
+          <Step title="Subheaders" description="Add as many subheaders as you need for your list." />
           <Step title="Still Waiting" description="This is a description." />
           <Step title="Still Waiting" description="This is a description." />
         </Steps>
-        
+        <Divider />
        <Row  justify='center'>
       <Col span={8}>
-        <Form layout="vertical" >
+        <Form  layout="vertical" >
           {CycleSteps}
           
         </Form>

@@ -1,59 +1,105 @@
-import React, {useState, useRef} from 'react'
+import React, {useState, useRef, useEffect} from 'react'
+import {useImmer} from 'use-immer';
 import {Form, InputNumber, Row, Col, Slider, Input, Space, Button, Divider} from 'antd';
-
 
 const { TextArea } = Input;
 
 
 
-const Subheading = ({state, event, subs}) => {
-    const imageRef = useRef(null);
-    const [template, setTemplate] = state;
-    const [subArray, setSubArray] = subs;
-    console.log(event)
-    
+const Subheading = ({state}) => {
+  
+    const [subData, setSubData] = useState({});
+    const [data, setData] = state;
+    const [keyCount, setKeyCount] = useState(0);
    
+    const {subheadingImage,subheadingTitle,clearBenefit} = subData;
 
-    const addImages = () => {
+
+    
+   const getsubData = (value, eventType) => {
+    if(eventType === "image") {
+        setSubData(subData => ({...subData, subheadingImage:value}));
+    }
+    else if(eventType === "title") {
+        setSubData(subData => ({...subData, subheadingTitle:value}));
         
-        const value = imageRef.current.input.value;
-        setTemplate((draft) => {
-            draft.subheadings.push({subheadinImages:value})
-        })
-       
+    }
+    else if(eventType === "clearBenefit") {
+        setSubData(subData => ({...subData, clearBenefit:value}));
+
+
+   };
+   if(keyCount === 0) {
+        setKeyCount(keyCount + 1);
+        setSubData(subData => ({...subData, key: keyCount})); 
+    }
+   console.log(keyCount)
+   }
+    const createSubheading = () => {
+        console.log(keyCount);
+        setSubData(subData => ({...subData, key:keyCount})); 
+        setData(data=> ([...data, subData]));
+        setKeyCount(keyCount + 1)
+        setSubData({})
+           
   }
 
-  const deleteSubheading = () => {
-    setSubArray((draft) =>{
-        const index = draft.findIndex(subheading => subheading.id === event)
-        console.log(index)
-       if (index !== -1) draft.splice(index, 1)
-    });
+  const DisableButton = () => {
+    if(!subheadingImage || !subheadingTitle || !clearBenefit){
+        return (
+            <Row justify='center'>
+            <Space>
+            <Button type="primary" disabled={true} onClick={createSubheading}>Create Subheading</Button>
+            </Space>
+            
+        </Row>
+        );
+    } else {
+        return (
+            <Row justify='center'>
+            <Space>
+            <Button type="primary" onClick={createSubheading}>Create Subheading</Button>
+            </Space>
+            
+        </Row>
+        );
+    }
   }
+  const deleteSubheading = () => {
+    console.log("will handle with firestore")
+  }
+
 
 
 
   return (
-    <div>
-    <Row><h3>Subheading #{event + 1}</h3></Row>
-    <Divider />
-    <Input.Group>
-        
-        <Form.Item
-            label="Subheading Image"
-            >
-                <Input ref={imageRef}/>
-                <Button onClick={addImages} type="primary">Submit</Button>
-        </Form.Item>
-        <Form.Item>
-            <Button onClick={deleteSubheading}>Delete Subheading</Button>
-        </Form.Item>
-
+    <div style={{border:"2px solid #1DA57A", padding:"30px", borderRadius:"10px", marginBottom: "30px"}}>
        
-    
-    </Input.Group>
+            
+            <Form.Item
+                label="Subheading Image"
+                >
+                    <Row><Col span={24}><Input value={subData.subheadingImage} onChange={(e) => {getsubData(e.target.value, "image")}} /></Col></Row>
+                    
+            </Form.Item>
+            <Form.Item
+                label="Subheading Title"
+                >
+                    <Row><Col span={24}><Input value={subData.subheadingTitle} onChange={(e) => {getsubData(e.target.value, "title")}}/></Col></Row>
+                    
+            </Form.Item>
+            <Form.Item
+                label="Subheading Clear Benefit"
+                >
+                    <Row><Col span={24}><Input.TextArea rows={4} value={subData.clearBenefit} onChange={(e) => {getsubData(e.target.value, "clearBenefit")}}/></Col></Row>
+                    
+            </Form.Item>
+        
+     
+       <DisableButton />
     </div>
-  )
+  ) 
 }
+
 
 export default Subheading
