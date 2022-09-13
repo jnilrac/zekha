@@ -6,9 +6,10 @@ const { TextArea } = Input;
 
 
 
-const EditSubheading = ({state, event, subs}) => {
+const EditSubheading = ({state, formShow}) => {
   
     const [subData, setSubData] = useState({});
+    const [showEditForm, setShowEditForm] = formShow;
    
     const {subheadingImage,subheadingTitle,clearBenefit} = subData;
 
@@ -27,15 +28,17 @@ const EditSubheading = ({state, event, subs}) => {
 
    };
    }
-    const createSubheading = () => {
+    const editSubheading = () => {
         
-        console.log("will handle with firestore")
+        setShowEditForm(false);
        
-  }
+    }
+    
+    const cancelEdit = () => {
+        setShowEditForm(false);
+    }
 
-  const deleteSubheading = () => {
-    console.log("will handle with firestore")
-  }
+
 
 
 
@@ -66,7 +69,8 @@ const EditSubheading = ({state, event, subs}) => {
      
         <Row justify='center'>
                 <Space>
-                <Button type="primary" onClick={createSubheading}>Edit Subheading</Button>
+                <Button type="primary" onClick={editSubheading}>Edit Subheading</Button>
+                <Button type="danger" onClick={cancelEdit}>Cancel</Button>
                 </Space>
                 
             </Row>

@@ -26,12 +26,20 @@ const Subheaders = (props) => {
       ];
 
 const [data, setData] = useState([])
+const [showEditForm, setShowEditForm] = useState(false);
+const ShowForm = () => {
+    if(!showEditForm){
+        return <Subheading state={[data, setData]} />;
+    }else {
+        return <EditSubheading formShow={[showEditForm, setShowEditForm]} state={[data, setData]}  />
+    }
+}
 console.log(data);
   return (
     <>          
-       <Subheading state={[data, setData]} />
-       <EditSubheading state={[data, setData]}  />
-        <SubheadingTable state={[data, setData]} />
+       
+       <ShowForm />
+        <SubheadingTable formShow={[showEditForm, setShowEditForm]} state={[data, setData]} />
         
     </>
  

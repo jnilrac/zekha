@@ -95,7 +95,7 @@ const Listicle = (props) => {
         </Steps>
         <Divider />
        <Row  justify='center'>
-      <Col span={8}>
+      <Col span={16}>
         <Form  layout="vertical" >
           {CycleSteps}
           

@@ -65,11 +65,6 @@ const Subheading = ({state}) => {
         );
     }
   }
-  const deleteSubheading = () => {
-    console.log("will handle with firestore")
-  }
-
-
 
 
   return (
