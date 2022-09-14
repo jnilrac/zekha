@@ -18,7 +18,6 @@ const listicleTemplate = {
     problem:'',
     introBenefit: ''
   },
-  listQuantity: 0,
   subheadings:[
   ],
   conclusion: '',
@@ -41,13 +40,19 @@ const Listicle = (props) => {
     : null
   };
 
+  const ShowSubheadings = () => {
+    return template.subheadings.map((sub) =>{
+      return <h1 key={sub.key}>{sub.subheadingTitle}</h1> 
+    })
+  };
+
   const CyclePreviews = () => {
     return step === 0 ? 
     <>
     <Row justify='center'><Button size="large" onClick={() =>{setStep(1)}} type="primary">Next</Button></Row>
     <Divider />
     <Row justify='center'><h2>Title Preview:</h2></Row>
-    <Row justify='center'><h1>{`${title.topic} ${title.benefit} ${title.timePeriod}`}</h1></Row>
+    <Row justify='center'><h1>{`${title.topic}`}</h1></Row>
     <Row style={{margintTop:"200px"}} justify='center'><img style={{width:'750px', margin:"20px"}}src={`${title.heroImage}`} /></Row>
     
     </>
@@ -59,7 +64,8 @@ const Listicle = (props) => {
       </Space></Row>
      <Divider />
     <Row justify='center'><h2>Intro Preview:</h2></Row>
-    <Row justify='center'><h1>{`${intro.problem} ${intro.introBenefit}`}</h1></Row>
+    <Row justify='center'><h1>{`${intro.problem}`}</h1></Row>
+    <Row justify='center'><h1>{`${intro.introBenefit}`}</h1></Row>
     <Row justify='center'>
 
     </Row>
@@ -72,8 +78,8 @@ const Listicle = (props) => {
         <Col ><Button size="large" onClick={() =>{setStep(3)}} type="primary">Next</Button></Col>
       </Space></Row>
      <Divider />
-    <Row justify='center'><h2>Intro Preview:</h2></Row>
-    <Row justify='center'><h1>Test</h1></Row>
+    <Row justify='center'><h2>Subheading Preview:</h2></Row>
+    <Row justify='center'><ShowSubheadings /></Row>
     <Row justify='center'>
 
     </Row>

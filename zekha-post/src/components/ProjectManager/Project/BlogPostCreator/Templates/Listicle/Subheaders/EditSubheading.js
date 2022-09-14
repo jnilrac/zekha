@@ -8,11 +8,15 @@ const { TextArea } = Input;
 
 const EditSubheading = ({templateState ,state, formShow}) => {
   
-    const [subData, setSubData] = useState({});
+   
     const [showEditForm, setShowEditForm] = formShow;
     const [template, setTemplate ] = templateState;
-   
+    const [data, setData] = state;
+    const {record} = showEditForm;
+    const [subData, setSubData] = useState(record);
     const {subheadingImage,subheadingTitle,clearBenefit} = subData;
+    console.log(subData)
+
 
 
     
@@ -30,13 +34,28 @@ const EditSubheading = ({templateState ,state, formShow}) => {
    };
    }
     const editSubheading = () => {
+        const index = data.indexOf(record);
+        const newArray = [...data];
+        newArray.splice(index, 1, subData);
+        setData(newArray)
         
-        setShowEditForm(false);
+        setTemplate((draft) =>{
+            draft.subheadings = data;
+        })
+        setSubData({});
+
+        setShowEditForm((showEditForm) => ({...showEditForm, show:false}))
        
     }
+
+    useEffect(()=>{
+        setTemplate((draft) =>{
+            draft.subheadings = data;
+        })
+      },[template])
     
     const cancelEdit = () => {
-        setShowEditForm(false);
+        setShowEditForm((showEditForm) => ({...showEditForm, show:false}))
     }
 
 
@@ -51,7 +70,7 @@ const EditSubheading = ({templateState ,state, formShow}) => {
             <Form.Item
                 label="Subheading Image"
                 >
-                    <Row><Col span={24}><Input  onChange={(e) => {getsubData(e.target.value, "image")}} /></Col></Row>
+                    <Row><Col span={24}><Input onChange={(e) => {getsubData(e.target.value, "image")}} /></Col></Row>
                     
             </Form.Item>
             <Form.Item
@@ -63,7 +82,7 @@ const EditSubheading = ({templateState ,state, formShow}) => {
             <Form.Item
                 label="Subheading Clear Benefit"
                 >
-                    <Row><Col span={24}><Input.TextArea rows={4} onChange={(e) => {getsubData(e.target.value, "clearBenefit")}}/></Col></Row>
+                    <Row><Col span={24}><Input.TextArea rows={4}  onChange={(e) => {getsubData(e.target.value, "clearBenefit")}}/></Col></Row>
                     
             </Form.Item>
         

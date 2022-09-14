@@ -26,21 +26,21 @@ const Subheaders = ({state}) => {
       ];
 
 const [data, setData] = useState([])
-const [showEditForm, setShowEditForm] = useState(false);
+const [showEditForm, setShowEditForm] = useState({record:{}, show:false});
 const [template, setTemplate ] = state;
 const ShowForm = () => {
-    if(!showEditForm){
+    if(!showEditForm.show){
         return <Subheading templateState={[template, setTemplate ]} state={[data, setData]} />;
     }else {
         return <EditSubheading templateState={[template, setTemplate ]} formShow={[showEditForm, setShowEditForm]} state={[data, setData]}  />
     }
 }
-console.log(data);
+
   return (
     <>          
        
        <ShowForm />
-        <SubheadingTable formShow={[showEditForm, setShowEditForm]} state={[data, setData]} />
+        <SubheadingTable templateState={[template, setTemplate ]} formShow={[showEditForm, setShowEditForm]} state={[data, setData]} />
         
     </>
  

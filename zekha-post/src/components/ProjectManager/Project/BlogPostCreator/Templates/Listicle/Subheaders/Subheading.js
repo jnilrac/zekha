@@ -36,12 +36,21 @@ const Subheading = ({templateState, state}) => {
    }
   
    }
-
     const createSubheading = () => {
 
         setData(data=> ([...data, subData]));
+        console.log(data);
+        setTemplate((draft) =>{
+            draft.subheadings = data;
+        })
         setSubData({});
   }
+
+  useEffect(()=>{
+    setTemplate((draft) =>{
+        draft.subheadings = data;
+    })
+  },[template])
 
   const DisableButton = () => {
     if(!subheadingImage || !subheadingTitle || !clearBenefit){

@@ -2,9 +2,10 @@ import { Space, Table, Tag, Button, Popconfirm } from 'antd';
 import React, {useEffect, useState} from 'react';
 
 
-const SubheadingTable = ({formShow, state}) =>{ 
+const SubheadingTable = ({templateState, formShow, state}) =>{ 
     const [data, setData] = state; 
     const [showEditForm, setShowEditForm] = formShow;
+    const [template, setTemplate ] = templateState;
     const columns = [
         {
           title: 'Subheading Title',
@@ -26,7 +27,7 @@ const SubheadingTable = ({formShow, state}) =>{
             if(index === data.length -1){
                 showDown = true;
             }
-            if(showEditForm){
+            if(showEditForm.show){
                 return <span>Edit in progress...</span>
             }
             return (
@@ -46,14 +47,20 @@ const SubheadingTable = ({formShow, state}) =>{
  
 
 const editSub = (record) => {
-    setShowEditForm(true)
+    setShowEditForm((showEditForm) => ({...showEditForm, show:true}))
+    setShowEditForm((showEditForm) => ({...showEditForm, record:record}))
 };
+useEffect(()=>{
 
+},[showEditForm])
 const deleteSub = (record) => {
     var index = data.indexOf(record);
     const newArray = [...data];
     newArray.splice(index, 1);
     setData(newArray)
+    setTemplate((draft) =>{
+      draft.subheadings = data;
+  })
 };
 
 const moveUp = (record) =>{
@@ -63,6 +70,9 @@ const moveUp = (record) =>{
     newArray.splice(index, 1);
     newArray.splice(newIndex, 0, record);
     setData(newArray)
+    setTemplate((draft) =>{
+      draft.subheadings = data;
+  })
 };
 
 const moveDown = (record) =>{
@@ -72,6 +82,9 @@ const moveDown = (record) =>{
     newArray.splice(index, 1);
     newArray.splice(newIndex, 0, record);
     setData(newArray)
+    setTemplate((draft) =>{
+      draft.subheadings = data;
+  })
 };
 
 
