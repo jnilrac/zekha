@@ -6,10 +6,11 @@ const { TextArea } = Input;
 
 
 
-const EditSubheading = ({state, formShow}) => {
+const EditSubheading = ({templateState ,state, formShow}) => {
   
     const [subData, setSubData] = useState({});
     const [showEditForm, setShowEditForm] = formShow;
+    const [template, setTemplate ] = templateState;
    
     const {subheadingImage,subheadingTitle,clearBenefit} = subData;
 

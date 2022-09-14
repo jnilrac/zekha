@@ -17,17 +17,17 @@ const Intro = (props) => {
         <Input.Group>
             
             <Form.Item
-                label="Problem"
+                label="Intro Problem"
                 name="problem"
                 >
-                    <Input onChange={(e) => { handleUpdate(e.target.value, 'problem')}}/>
+                    <Input.TextArea rows={4} onChange={(e) => { handleUpdate(e.target.value, 'problem')}}/>
             </Form.Item>
 
             <Form.Item
                 label="Intro Benefit"
                 name="introBenefit"
                 >
-                    <Input onChange={(e) => { handleUpdate(e.target.value, 'introBenefit')}}/>
+                    <Input.TextArea  rows={4} onChange={(e) => { handleUpdate(e.target.value, 'introBenefit')}}/>
             </Form.Item>
         
         

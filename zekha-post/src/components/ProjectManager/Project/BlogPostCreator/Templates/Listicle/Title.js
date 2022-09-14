@@ -10,8 +10,6 @@ const Title = (props) => {
 
   const handleUpdate = (event, eventType) => {
     if (eventType === 'topic') setTemplate(draft => {draft.title.topic = event})
-    else if (eventType === 'benefit') setTemplate(draft => {draft.title.benefit = event})
-    else if (eventType === 'timePeriod') setTemplate(draft => {draft.title.timePeriod = event})
     else if (eventType === 'heroImage') setTemplate(draft => {draft.title.heroImage = event})
   };
 
@@ -21,30 +19,11 @@ const Title = (props) => {
     <>
         <Input.Group>
         
-            <Form.Item
-                label="Topic"
-                name="topic"
-                >
+            <Form.Item label="Title">
                     <Input onChange={(e) => {handleUpdate(e.target.value, "topic")}}/>
             </Form.Item>
 
-            <Form.Item
-                label="Benefit"
-                name="benefit"
-                >
-                    <Input onChange={(e) => {handleUpdate(e.target.value, "benefit")}}/>
-            </Form.Item>
-
-            <Form.Item
-                label="Time Period"
-                name="timePeriod"
-                >
-                    <Input onChange={(e) => {handleUpdate(e.target.value, "timePeriod")}}/>
-            </Form.Item>
-            <Form.Item
-                label="Hero Image"
-                name="heroImage"
-                >
+            <Form.Item label="Hero Image" >
                     <Input onChange={(e) => {handleUpdate(e.target.value, "heroImage")}}/>
             </Form.Item>
         

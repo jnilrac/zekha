@@ -5,7 +5,7 @@ import Subheading from './Subheading';
 import EditSubheading from './EditSubheading';
 import SubheadingTable from './SubheadingTable';
 
-const Subheaders = (props) => { 
+const Subheaders = ({state}) => { 
     const subs = [
         {
           key: '1',
@@ -27,11 +27,12 @@ const Subheaders = (props) => {
 
 const [data, setData] = useState([])
 const [showEditForm, setShowEditForm] = useState(false);
+const [template, setTemplate ] = state;
 const ShowForm = () => {
     if(!showEditForm){
-        return <Subheading state={[data, setData]} />;
+        return <Subheading templateState={[template, setTemplate ]} state={[data, setData]} />;
     }else {
-        return <EditSubheading formShow={[showEditForm, setShowEditForm]} state={[data, setData]}  />
+        return <EditSubheading templateState={[template, setTemplate ]} formShow={[showEditForm, setShowEditForm]} state={[data, setData]}  />
     }
 }
 console.log(data);

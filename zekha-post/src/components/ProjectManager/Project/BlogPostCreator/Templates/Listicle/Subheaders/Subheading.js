@@ -6,15 +6,15 @@ const { TextArea } = Input;
 
 
 
-const Subheading = ({state}) => {
+const Subheading = ({templateState, state}) => {
   
     const [subData, setSubData] = useState({});
     const [data, setData] = state;
-    const [keyCount, setKeyCount] = useState(0);
+    const [template, setTemplate ] = templateState;
    
     const {subheadingImage,subheadingTitle,clearBenefit} = subData;
 
-
+   
     
    const getsubData = (value, eventType) => {
     if(eventType === "image") {
@@ -26,22 +26,21 @@ const Subheading = ({state}) => {
     }
     else if(eventType === "clearBenefit") {
         setSubData(subData => ({...subData, clearBenefit:value}));
-
-
    };
-   if(keyCount === 0) {
-        setKeyCount(keyCount + 1);
-        setSubData(subData => ({...subData, key: keyCount})); 
-    }
-   console.log(keyCount)
+   if(data.length === 0) {
+    setSubData(subData => ({...subData, key: 0})); 
+   } else {
+    const key = data.length;
+    console.log(key)
+    setSubData(subData => ({...subData, key: key})); 
    }
+  
+   }
+
     const createSubheading = () => {
-        console.log(keyCount);
-        setSubData(subData => ({...subData, key:keyCount})); 
+
         setData(data=> ([...data, subData]));
-        setKeyCount(keyCount + 1)
-        setSubData({})
-           
+        setSubData({});
   }
 
   const DisableButton = () => {
