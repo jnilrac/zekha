@@ -5,29 +5,12 @@ import Subheading from './Subheading';
 import EditSubheading from './EditSubheading';
 import SubheadingTable from './SubheadingTable';
 
-const Subheaders = ({state}) => { 
-    const subs = [
-        {
-          key: '1',
-          title: 'John Brown',
-          order: 1,
-        },
-        {
-          key: '2',
-          title: 'Jack Black',
-          order: 2,
-        },
-        {
-          key: '3',
-          title: 'Green Giant',
-          order: 3,
-        },
-       
-      ];
+const Subheaders = ({tableData,state}) => { 
 
-const [data, setData] = useState([])
+const [data, setData] = tableData;
 const [showEditForm, setShowEditForm] = useState({record:{}, show:false});
 const [template, setTemplate ] = state;
+
 const ShowForm = () => {
     if(!showEditForm.show){
         return <Subheading templateState={[template, setTemplate ]} state={[data, setData]} />;

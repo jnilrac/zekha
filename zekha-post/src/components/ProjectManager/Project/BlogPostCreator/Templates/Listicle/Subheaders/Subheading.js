@@ -12,7 +12,7 @@ const Subheading = ({templateState, state}) => {
     const [data, setData] = state;
     const [template, setTemplate ] = templateState;
    
-    const {subheadingImage,subheadingTitle,clearBenefit} = subData;
+    const {subheadingImage,subheadingTitle,clearBenefit, actionItems} = subData;
 
    
     
@@ -26,7 +26,10 @@ const Subheading = ({templateState, state}) => {
     }
     else if(eventType === "clearBenefit") {
         setSubData(subData => ({...subData, clearBenefit:value}));
-   };
+   }
+   else if(eventType === "actionItems") {
+    setSubData(subData => ({...subData, actionItems:value}));
+    }; 
    if(data.length === 0) {
     setSubData(subData => ({...subData, key: 0})); 
    } else {
@@ -82,19 +85,25 @@ const Subheading = ({templateState, state}) => {
             <Form.Item
                 label="Subheading Image"
                 >
-                    <Row><Col span={24}><Input value={subData.subheadingImage} onChange={(e) => {getsubData(e.target.value, "image")}} /></Col></Row>
+                    <Row><Col span={24}><Input value={subheadingImage} onChange={(e) => {getsubData(e.target.value, "image")}} /></Col></Row>
                     
             </Form.Item>
             <Form.Item
                 label="Subheading Title"
                 >
-                    <Row><Col span={24}><Input value={subData.subheadingTitle} onChange={(e) => {getsubData(e.target.value, "title")}}/></Col></Row>
+                    <Row><Col span={24}><Input value={subheadingTitle} onChange={(e) => {getsubData(e.target.value, "title")}}/></Col></Row>
                     
             </Form.Item>
             <Form.Item
                 label="Subheading Clear Benefit"
                 >
-                    <Row><Col span={24}><Input.TextArea rows={4} value={subData.clearBenefit} onChange={(e) => {getsubData(e.target.value, "clearBenefit")}}/></Col></Row>
+                    <Row><Col span={24}><Input.TextArea rows={4} value={clearBenefit} onChange={(e) => {getsubData(e.target.value, "clearBenefit")}}/></Col></Row>
+                    
+            </Form.Item>
+            <Form.Item
+                label="Action items"
+                >
+                    <Row><Col span={24}><Input.TextArea rows={4} value={actionItems} onChange={(e) => {getsubData(e.target.value, "actionItems")}}/></Col></Row>
                     
             </Form.Item>
         
