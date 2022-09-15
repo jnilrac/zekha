@@ -30,7 +30,7 @@ const Listicle = (props) => {
  
   const [template, setTemplate] = useImmer(listicleTemplate );
   const [step, setStep] = useState(0)
-  const {title, intro, subheadings, conclusion} = template;
+  const {title,heroImage, intro, subheadings, conclusion} = template;
   const [data, setData] = useState([])
  console.log(template)
   const CycleSteps = () => {
@@ -55,7 +55,7 @@ const Listicle = (props) => {
     <Divider />
     <Row justify='center'><h2>Title Preview:</h2></Row>
     <Row justify='center'><h1>{`${title.topic}`}</h1></Row>
-    <Row style={{margintTop:"200px"}} justify='center'><img style={{width:'750px', margin:"20px"}}src={`${title.heroImage}`} /></Row>
+    <Row style={{margintTop:"200px"}} justify='center'><img style={{width:'750px', margin:"20px"}}src={`${heroImage}`} /></Row>
     
     </>
     :step === 1 ? 

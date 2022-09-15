@@ -15,9 +15,9 @@ const Conclusion = ({state}) => {
             
             <Form.Item
                 label="Conclusion"
-                name="problem"
+                
                 >
-                    <Input.TextArea rows={4} onChange={(e) => { handleUpdate(e.target.value, 'conclusion')}}/>
+                    <Input.TextArea rows={4} value={template.conclusion} onChange={(e) => { handleUpdate(e.target.value, 'conclusion')}}/>
             </Form.Item>
     
         </Input.Group>
