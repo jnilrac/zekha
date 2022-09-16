@@ -2,7 +2,7 @@ import React from 'react'
 import { Tabs, Row, Col } from 'antd';
 import BlogPostArticles from './BlogPostArticles';
 import BlogPostCreator from './BlogPostCreator';
-import ImageManager from './ImageManager';
+
 import {Link} from 'react-router-dom'
 
 const onChange = (key) => {
@@ -31,11 +31,7 @@ const Project = () => {
         key: '2',
         children: <BlogPostArticles />,
       },
-      {
-        label: `Image Manager`,
-        key: '3',
-        children: <ImageManager />,
-      },
+   
     
     ]}
   />

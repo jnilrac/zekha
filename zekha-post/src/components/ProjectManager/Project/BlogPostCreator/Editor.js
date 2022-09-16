@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import ReactQuill from 'react-quill';
+import React, { useState, useRef, useEffect } from 'react';
+import ReactQuill, {Quill, handlers} from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { Divider, Input, Row } from 'antd';
 
@@ -54,27 +54,35 @@ const Editor = ({state}) => {
   console.log(value)
   const quillRef = useRef(null);
   console.log(quillRef)
-  console.log(quillRef.current.unprivilegedEditor.getContents())
-  const modules = {
-    toolbar: [
-      [{ 'header': [1, 2,3,4, false] }],
-      ['bold', 'italic', 'underline','strike', 'blockquote'],
-      [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
-      ['link', 'image'], [{ 'align': [] }],
-      ['clean']
-    ],
-  }
+  
+ 
+  
 
+  
+
+function insertToEditor(url) {
+  quillRef.current.unprivilegedEditor.getEditor().insertEmbed(null, "image", url);
+}
  const  formats = [
     'header',
     'bold', 'italic', 'underline', 'strike', 'blockquote',
     'list', 'bullet', 'indent',
     'link', 'image'
   ]
+  const modules = {
+    toolbar: [
+      [{ 'header': [1, 2,3,4, false] }],
+      ['bold', 'italic', 'underline','strike', 'blockquote'],
+      [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
+      ['link', 'image', 'video'], [{ 'align': [] }],
+      ['clean']
+    ],
+    
+  }
   
-  //const editor = quillRef.getEditor();
-  //const unprivilegedEditor = quillRef.makeUnprivilegedEditor(editor);
- // console.log(unprivilegedEditor)
+useEffect(()=>{
+    console.log(quillRef.current.unprivilegedEditor.getContents())
+},[value])
   return (
     <>
     <Row justify='center'><h1>{template.title.topic}</h1></Row>

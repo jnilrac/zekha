@@ -82,6 +82,7 @@ const BlogPostArticles = () => {
             onCancel={cancel}
             okText="Yes"
             cancelText="No"
+            disabled={!hasSelected}
           >
             <Button type="primary" disabled={!hasSelected}>
               Delete Selected
@@ -94,6 +95,7 @@ const BlogPostArticles = () => {
             onCancel={cancel}
             okText="Yes"
             cancelText="No"
+            disabled={!hasSelected}
           >
             <Button type="primary" disabled={!hasSelected}>
               Send to Export Queue
