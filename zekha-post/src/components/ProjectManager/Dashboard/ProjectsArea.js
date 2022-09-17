@@ -1,83 +1,51 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import { Col, Row, Divider, List, Button, Space } from 'antd';
+import { db } from '../../../services/firebase';
+import { doc, query, where, onSnapshot, collection, deleteDoc, setDoc, updateDoc, serverTimestamp, getDocs} from "firebase/firestore";
 import NewProject from './NewProject';
 import ProjectsCard from './ProjectsCard';
 
-const data = [
-    {
-      title: 'Project 1',
-    },
-    {
-      title: 'Project 2',
-    },
-    {
-      title: 'Project 3',
-    },
-    {
-      title: 'Project 4',
-    },
-    {
-        title: 'Project 1',
-      },
-      {
-        title: 'Project 2',
-      },
-      {
-        title: 'Project 3',
-      },
-      {
-        title: 'Project 4',
-      },
-      {
-        title: 'Project 1',
-      },
-      {
-        title: 'Project 2',
-      },
-      {
-        title: 'Project 3',
-      },
-      {
-        title: 'Project 4',
-      },
-      {
-        title: 'Project 1',
-      },
-      {
-        title: 'Project 2',
-      },
-      {
-        title: 'Project 3',
-      },
-      {
-        title: 'Project 4',
-      },
-      {
-        title: 'Project 1',
-      },
-      {
-        title: 'Project 2',
-      },
-      {
-        title: 'Project 3',
-      },
-      {
-        title: 'Project 4',
-      },{
-        title: 'Project 1',
-      },
-      {
-        title: 'Project 2',
-      },
-      {
-        title: 'Project 3',
-      },
-      {
-        title: 'Project 4',
-      },
-  ];
 
-const ProjectsArea = () => {
+
+
+const ProjectsArea = ({curProj, uid}) => {
+  const [projects, setProjects] = useState([]);
+  const [currentProject, setCurrentProject] = curProj;
+
+  useEffect(() => {
+    
+    // Firebase realtime listenter
+
+     if(uid){ 
+      
+      const q = query(collection(db, "projects"), where("projectCreator", "==", uid));
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const projectArray = [];
+      querySnapshot.forEach((doc) => {
+        const {projectCreator, projectTitle, timestamp, blogNumber}= doc.data();
+
+        const dataFields = {
+            key: doc.id,
+            title:projectTitle,
+            blogNumber:blogNumber,
+            projectCreator: projectCreator,
+            timestamp: timestamp,
+         }
+         projectArray.push(dataFields)
+        
+      });
+      setProjects(projectArray)
+      
+});
+
+  return () => {
+    unsubscribe();
+    }
+}
+
+
+},[uid])
+
   return (
     <>
     <Row>
@@ -89,23 +57,23 @@ const ProjectsArea = () => {
             <h3>New Project</h3>
           </Col>
           <Col>
-            <NewProject />
+            <NewProject uid={uid} />
           </Col>
       </Space> 
     </Row>
     <Divider />
     <Row justify='center'>
         <Col span={24} style={{ borderRadius:"10px", opacity:"0.5", padding:"20px"}}>
-        <List
-    grid={{
-      gutter: 16,
-      column: 4,
-    }}
-    dataSource={data}
-    renderItem={(item) => (
-      <ProjectsCard item={item} />
-    )}
-  />
+          <List
+              grid={{
+                gutter: 16,
+                column: 4,
+              }}
+              dataSource={projects}
+              renderItem={(item) => (
+                <ProjectsCard curProj={[currentProject, setCurrentProject]} uid={uid} item={item} />
+              )}
+            />
         </Col>
     </Row>
     </>

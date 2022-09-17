@@ -9,12 +9,15 @@ import {
   UserOutlined,
 } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu } from 'antd';
+
 const { Header, Content, Footer, Sider } = Layout;
 
 
 
 
 const ProjectManager = () => {
+
+  const [currentProject, setCurrentProject] = useState({key:'', title:''});
   const navigate = useNavigate();
   const {user, logout} = UserAuth()
   let location = useLocation();
@@ -42,7 +45,7 @@ return (
         padding: '0 50px',
       }}
     >
-     <Outlet />
+     <Outlet context={[currentProject, setCurrentProject]} />
     </Content>
     <Footer
       style={{

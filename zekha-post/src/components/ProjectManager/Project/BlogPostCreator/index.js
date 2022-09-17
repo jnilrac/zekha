@@ -1,18 +1,37 @@
 import React, {useState} from 'react'
 import { Col, Row, Divider, List } from 'antd';
 import TemplateCard from './TemplateCard'
-import Listicle from './Templates/Listicle'
+import Listicle from './Templates/Listicle';
+import { UserAuth } from '../../../../contexts/authcontext';
+import {useImmer} from 'use-immer';
 
 
+const listicleTemplate = {
+  type:'listicle',
+  title:{
+    topic: ''
+  },
+  heroImage: '',
+  intro: {
+    problem:'',
+    introBenefit: ''
+  },
+  subheadings:[
+  ],
+  conclusion: ''
+
+}
 
 
-const BlogPostCreator = () => {
-  const [testState, setTestState ] = useState('123')
-  console.log(testState)
+const BlogPostCreator = ({curProj, uid}) => {
+ const [currentProject, setCurrentProject] = curProj;
+ const [template, setTemplate] = useImmer(listicleTemplate );
+ const [finalPost, setFinalPost] = useState('');
+  
   const data = [
     {
       title: 'Listicle',
-      template: <Listicle state={[testState, setTestState]}/>,
+      template: <Listicle post={[finalPost, setFinalPost]}  curTemp={[template, setTemplate]} curProj={[currentProject, setCurrentProject]} uid={uid} />,
       content: "A list of 10-25 bite-sized tips, strategies, techniques, tools… or anything else that makes sense for a list.",
     }
   ];
@@ -35,7 +54,7 @@ const BlogPostCreator = () => {
     }}
     dataSource={data}
     renderItem={(item) => (
-      <TemplateCard item={item} content={item.content} />
+      <TemplateCard curTemp={[template, setTemplate]} post={[finalPost, setFinalPost]} curProj={[currentProject, setCurrentProject]} uid={uid} item={item} content={item.content} />
     )}
   />
         </Col>
@@ -45,4 +64,4 @@ const BlogPostCreator = () => {
   )
 }
 
-export default BlogPostCreator
+export default BlogPostCreator;

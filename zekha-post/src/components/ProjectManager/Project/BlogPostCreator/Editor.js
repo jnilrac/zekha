@@ -3,13 +3,14 @@ import ReactQuill, {Quill, handlers} from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { Divider, Input, Row } from 'antd';
 
-const Editor = ({state}) => {
+const Editor = ({post,uid, state}) => {
   const [template, setTemplate] = state;
-
+  const [finalPost, setFinalPost] = post;
+ console.log(uid)
   const data = () => {
     
       const title = `<h1>${template.title.topic}</h1>`;
-      const heroimage = `<img src=${template.heroimage} />`;
+      const heroimage = `<img src=${template.heroImage} />`;
       const introProblem = `<p>${template.intro.problem}</p>`;
       const introBenefit = `<p>${template.intro.introBenefit}</p>`;
 
@@ -81,7 +82,9 @@ function insertToEditor(url) {
   }
   
 useEffect(()=>{
-    console.log(quillRef.current.unprivilegedEditor.getContents())
+    const postDelta = quillRef.current.unprivilegedEditor.getContents();
+    setFinalPost(postDelta);
+    console.log(postDelta);
 },[value])
   return (
     <>

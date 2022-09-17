@@ -1,37 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Table, Space, Popconfirm, message } from 'antd';
+import { doc, query, where, onSnapshot, collection, deleteDoc, setDoc, updateDoc, serverTimestamp, getDocs} from "firebase/firestore";
+import { db } from '../../../../services/firebase';
+import BlogPostEditor from '../BlogPostEditor/BlogPostEditor';
 
 
-const columns = [
+
+
+const BlogPostArticles = ({curProj, uid}) => {
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState();
+  const [currentProject, setCurrentProject] = curProj;
+  const {title, key} = currentProject;
+ console.log(uid)
+
+ const columns = [
   {
-    title: 'Name',
-    dataIndex: 'name',
+    title: 'Title',
+    dataIndex: 'title',
   },
   {
     title: 'Date Created',
-    dataIndex: 'createdAt',
+    dataIndex: 'timestamp',
   },
   {
     title: 'Action',
     key: 'action',
     render: (_, record) => (
       <Space size="middle">
-        <a>Open in Creator</a>
+        <BlogPostEditor post={record.key} />
     
       </Space>
     ),
   },
 ];
-const data = [];
 
-for (let i = 0; i < 46; i++) {
-  data.push({
-    key: i,
-    name: `Edward King ${i}`,
-    createdAt: 32,
-    address: `London, Park Lane no. ${i}`,
-  });
-}
 
 const confirm = (e) => {
   console.log(e);
@@ -44,9 +48,37 @@ const cancel = (e) => {
 };
 
 
-const BlogPostArticles = () => {
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [loading, setLoading] = useState(false);
+ useEffect(() => {
+    
+  // Firebase realtime listenter
+
+   if(uid){ 
+    
+    const q = query(collection(db, "posts"), where("parentProject", "==", key));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    const postArray = [];
+    querySnapshot.forEach((doc) => {
+      const {title, timestamp}= doc.data();
+
+      const dataFields = {
+          key: doc.id,
+          title:title,
+          timestamp: timestamp,
+       }
+       postArray.push(dataFields)
+      
+    });
+    setData(postArray)
+    
+});
+
+return () => {
+  unsubscribe();
+  }
+}
+
+
+},[uid]);
 
   const start = () => {
     setLoading(true); // ajax request after empty completing

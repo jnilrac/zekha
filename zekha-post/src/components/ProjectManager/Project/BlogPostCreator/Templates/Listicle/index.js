@@ -9,36 +9,25 @@ import Editor from '../../Editor';
 
 const {Step} = Steps;
 
-const listicleTemplate = {
-  title:{
-    topic: ''
-  },
-  heroImage: '',
-  intro: {
-    problem:'',
-    introBenefit: ''
-  },
-  subheadings:[
-  ],
-  conclusion: ''
-
-}
 
 
 
-const Listicle = (props) => {
- 
-  const [template, setTemplate] = useImmer(listicleTemplate );
+const Listicle = ({post,curTemp, curProj, uid}) => {
+  const [currentProject, setCurrentProject] = curProj;
+  const [template, setTemplate] = curTemp;
+  const [finalPost, setFinalPost] = post;
+
   const [step, setStep] = useState(0)
   const {title,heroImage, intro, subheadings, conclusion} = template;
   const [data, setData] = useState([])
  console.log(template)
+
   const CycleSteps = () => {
     return step === 0 ? <Title state={[template, setTemplate]} /> 
     :step === 1 ? <Intro state={[template, setTemplate]} /> 
     : step === 2 ? <Subheaders tableData={[data, setData] } state={[template, setTemplate]} /> 
     : step === 3 ? <Conclusion state={[template, setTemplate]} /> 
-    : step === 4 ? <Editor state={[template, setTemplate]} /> 
+    : step === 4 ? <Editor post={[finalPost, setFinalPost]} state={[template, setTemplate]} /> 
     : null
   };
 

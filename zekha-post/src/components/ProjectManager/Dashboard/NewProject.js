@@ -1,19 +1,33 @@
 import { Button, Modal, Input } from 'antd';
 import React, { useState } from 'react';
 import { FolderAddOutlined } from '@ant-design/icons';
-const NewProject = () => {
+import {db} from '../../../services/firebase'
+import { collection, addDoc, serverTimestamp } from "firebase/firestore"; 
+
+const NewProject = ({uid}) => {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-
   const [projectTitle, setProjectTitle] = useState('')
   console.log(projectTitle);
+
+  const addProject = async () => {
+    // Add a new document with a generated id.
+    const timestamp = serverTimestamp()
+    const docRef = await addDoc(collection(db, "projects"), {
+    projectTitle: projectTitle,
+    projectCreator: uid,
+    timestamp: timestamp
+    });
+    console.log("Document written with ID: ", docRef.id);
+  };
 
   const showModal = () => {
     setOpen(true);
   };
 
-  const handleOk = () => {
- 
+  const handleOk = async () => {
+     await addProject();
+     setProjectTitle('');
     setConfirmLoading(true);
     setTimeout(() => {
       setOpen(false);
@@ -22,6 +36,7 @@ const NewProject = () => {
   };
 
   const handleCancel = () => {
+    setProjectTitle('');
     console.log('Clicked cancel button');
     setOpen(false);
   };
@@ -37,7 +52,7 @@ const NewProject = () => {
         onCancel={handleCancel}
       >
         <p>Project Title:</p>
-        <Input name="titleInput" onChange={(e) => {setProjectTitle(e.target.value)}} />
+        <Input name="titleInput" value={projectTitle} onChange={(e) => {setProjectTitle(e.target.value)}} />
       </Modal>
     </>
   );
