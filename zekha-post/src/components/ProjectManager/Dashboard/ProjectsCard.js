@@ -2,22 +2,24 @@ import React, {useState, useEffect} from 'react'
 import { Card, List, Row, Col, Button, Space, Statistic, Popconfirm, message, Divider} from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../../../services/firebase';
-import {getDocs, query, where, collection} from "firebase/firestore";
+import {getDocs, query, where, collection, deleteDoc, doc} from "firebase/firestore";
 
 
 const ProjectsCard = ({ curProj, uid , item}) => {
   const[currentProject, setCurrentProject] = curProj;
   const[blogNumber, setBlogNumber] = useState(0);
   const navigate = useNavigate();
+
   const confirm = (e) => {
-    console.log(e);
-    message.success('Click on Yes');
+    deleteProject();
+    message.success('Project deleted!');
   };
   
   const cancel = (e) => {
-    console.log(e);
-    message.error('Click on No');
+  
   };
+
+  
 
   const openProject = () => {
     setCurrentProject(project => ({...project, key:item.key, title:item.title, blogNumber:item.blogNumber}))
@@ -37,6 +39,23 @@ const ProjectsCard = ({ curProj, uid , item}) => {
   setBlogNumber(blogCount);
   
  };
+
+ const deleteProject = async () => {
+      const postArray = [];
+      const q = query(collection(db, "posts"), where("parentProject", "==", item.key));
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc)=>{
+        postArray.push(doc.id);
+      });
+      postArray.map(async (post) => {
+        await deleteDoc(doc(db, "posts", post));
+      });
+
+      await deleteDoc(doc(db, "projects", item.key));
+   
+ };
+
+
 
  useEffect(() =>{
   getBlogNumber();

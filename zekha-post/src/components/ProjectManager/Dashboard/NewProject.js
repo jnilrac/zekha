@@ -32,7 +32,7 @@ const NewProject = ({uid}) => {
     setTimeout(() => {
       setOpen(false);
       setConfirmLoading(false);
-    }, 2000);
+    }, 750);
   };
 
   const handleCancel = () => {

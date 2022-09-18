@@ -3,6 +3,7 @@ import { Button, Table, Space, Popconfirm, message } from 'antd';
 import { doc, query, where, onSnapshot, collection, deleteDoc, setDoc, updateDoc, serverTimestamp, getDocs} from "firebase/firestore";
 import { db } from '../../../../services/firebase';
 import BlogPostEditor from '../BlogPostEditor/BlogPostEditor';
+import ExportModal from './ExportModal';
 
 
 
@@ -38,14 +39,20 @@ const BlogPostArticles = ({curProj, uid}) => {
 
 
 const confirm = (e) => {
-  console.log(e);
-  message.success('Click on Yes');
+ deletePosts();
+  message.success('Post(s) deleted!');
 };
 
 const cancel = (e) => {
-  console.log(e);
-  message.error('Click on No');
+  
 };
+
+
+const deletePosts = async () => {
+  selectedRowKeys.map( async (id) => {
+    await deleteDoc(doc(db, "posts", id));
+  });
+}
 
 
  useEffect(() => {
@@ -121,20 +128,7 @@ return () => {
             </Button>
           
           </Popconfirm>
-          <Popconfirm
-            title="Are you sure you want to move selected post(s) to export queue?"
-            onConfirm={confirm}
-            onCancel={cancel}
-            okText="Yes"
-            cancelText="No"
-            disabled={!hasSelected}
-          >
-            <Button type="primary" disabled={!hasSelected}>
-              Send to Export Queue
-            </Button>
-          
-          </Popconfirm>
-
+          <ExportModal keys={[selectedRowKeys, setSelectedRowKeys]} hasSelected={hasSelected} />
         </Space>
          
         
