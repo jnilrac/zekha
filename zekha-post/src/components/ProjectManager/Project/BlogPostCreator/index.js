@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { Col, Row, Divider, List } from 'antd';
 import TemplateCard from './TemplateCard'
 import Listicle from './Templates/Listicle';
@@ -25,6 +25,7 @@ const listicleTemplate = {
 
 const BlogPostCreator = ({curProj, uid}) => {
  const [currentProject, setCurrentProject] = curProj;
+ const {title, key} = currentProject;
  const [template, setTemplate] = useImmer(listicleTemplate );
  const [finalPost, setFinalPost] = useState('');
   
@@ -35,6 +36,18 @@ const BlogPostCreator = ({curProj, uid}) => {
       content: "A list of 10-25 bite-sized tips, strategies, techniques, tools… or anything else that makes sense for a list.",
     }
   ];
+
+  useEffect(() => {
+    console.log(key)
+  if(key === undefined || key.length === 0){
+    setCurrentProject(JSON.parse(window.localStorage.getItem('currentProject')))
+    console.log(window.localStorage.getItem('currentProject'))
+  } else if (key.length > 0 ) {
+    const localProject = JSON.stringify(currentProject)
+    window.localStorage.setItem('currentProject', localProject);
+  }
+  
+  }, [key])
 
   return (
     <>

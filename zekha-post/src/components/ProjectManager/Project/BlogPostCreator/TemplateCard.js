@@ -1,6 +1,6 @@
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Col, DatePicker, Drawer, Form, Input, Row, Select, Space, List, Card } from 'antd';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { collection, addDoc, serverTimestamp, updateDoc, doc } from "firebase/firestore"; 
 import { db } from '../../../../services/firebase';
 
@@ -10,7 +10,7 @@ import { db } from '../../../../services/firebase';
 const TemplateCard = ({post ,curTemp, curProj, uid, item, content}) => {
   const [open, setOpen] = useState(false);
   const [currentProject, setCurrentProject] = curProj;
-  console.log(currentProject)
+  const {key} = currentProject;
   const [finalPost, setFinalPost] = post;
   const [template, setTemplate] = curTemp;
  const {title} = template;
@@ -45,13 +45,24 @@ const TemplateCard = ({post ,curTemp, curProj, uid, item, content}) => {
       title: title.topic,
       content: postString,
       postCreator: uid,
-      parentProject: currentProject.key,
+      parentProject: key,
       timestamp: timestamp
     });
   
    onClose();
   };
  
+  useEffect(() => {
+    console.log(key)
+  if(key === undefined || key.length === 0){
+    setCurrentProject(JSON.parse(window.localStorage.getItem('currentProject')))
+    console.log(window.localStorage.getItem('currentProject'))
+  } else if (key.length > 0 ) {
+    const localProject = JSON.stringify(currentProject)
+    window.localStorage.setItem('currentProject', localProject);
+  }
+  
+  }, [key])
 
   return (
     <>

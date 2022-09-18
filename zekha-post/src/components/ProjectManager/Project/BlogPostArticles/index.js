@@ -16,6 +16,7 @@ const BlogPostArticles = ({curProj, uid}) => {
   const {title, key} = currentProject;
  console.log(uid)
 
+
  const columns = [
   {
     title: 'Title',
@@ -54,6 +55,17 @@ const deletePosts = async () => {
   });
 }
 
+useEffect(() => {
+  console.log(key)
+if(key === undefined || key.length === 0){
+  setCurrentProject(JSON.parse(window.localStorage.getItem('currentProject')))
+  console.log(window.localStorage.getItem('currentProject'))
+} else if (key.length > 0 ) {
+  const localProject = JSON.stringify(currentProject)
+  window.localStorage.setItem('currentProject', localProject);
+}
+
+}, [key])
 
  useEffect(() => {
     
@@ -85,7 +97,7 @@ return () => {
 }
 
 
-},[uid]);
+},[uid, key]);
 
   const start = () => {
     setLoading(true); // ajax request after empty completing
