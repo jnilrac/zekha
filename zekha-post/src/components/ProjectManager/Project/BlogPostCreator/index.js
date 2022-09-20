@@ -28,6 +28,7 @@ const BlogPostCreator = ({curProj, uid}) => {
  const {title, key} = currentProject;
  const [template, setTemplate] = useImmer(listicleTemplate );
  const [finalPost, setFinalPost] = useState('');
+
   
   const data = [
     {

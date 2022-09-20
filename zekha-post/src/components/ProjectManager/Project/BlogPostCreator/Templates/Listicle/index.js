@@ -23,9 +23,9 @@ const Listicle = ({post,curTemp, curProj, uid}) => {
  console.log(template)
 
   const CycleSteps = () => {
-    return step === 0 ? <Title state={[template, setTemplate]} /> 
+    return step === 0 ? <Title uid={uid} state={[template, setTemplate]} /> 
     :step === 1 ? <Intro state={[template, setTemplate]} /> 
-    : step === 2 ? <Subheaders tableData={[data, setData] } state={[template, setTemplate]} /> 
+    : step === 2 ? <Subheaders uid={uid} tableData={[data, setData] } state={[template, setTemplate]} /> 
     : step === 3 ? <Conclusion state={[template, setTemplate]} /> 
     : step === 4 ? <Editor post={[finalPost, setFinalPost]} state={[template, setTemplate]} /> 
     : null

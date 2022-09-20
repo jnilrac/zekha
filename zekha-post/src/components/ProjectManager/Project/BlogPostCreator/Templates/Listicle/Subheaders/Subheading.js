@@ -1,13 +1,13 @@
 import React, {useState, useRef, useEffect} from 'react'
 import {useImmer} from 'use-immer';
 import {Form, InputNumber, Row, Col, Slider, Input, Space, Button, Divider} from 'antd';
-
+import ImageUpload from '../../ImageUpload';
 const { TextArea } = Input;
 
 
 
 const Subheading = ({templateState, state}) => {
-  
+    
     const [subData, setSubData] = useState({});
     const [data, setData] = state;
     const [template, setTemplate ] = templateState;
@@ -16,8 +16,8 @@ const Subheading = ({templateState, state}) => {
 
    
     
-   const getsubData = (value, eventType) => {
-    if(eventType === "image") {
+   const getSubData = (value, eventType) => {
+    if(eventType === "heroImage") {
         setSubData(subData => ({...subData, subheadingImage:value}));
     }
     else if(eventType === "title") {
@@ -81,29 +81,27 @@ const Subheading = ({templateState, state}) => {
   return (
     <div style={{border:"2px solid #1DA57A", padding:"30px", borderRadius:"10px", marginBottom: "30px"}}>
        
-            
             <Form.Item
-                label="Subheading Image"
-                >
-                    <Row><Col span={24}><Input value={subheadingImage} onChange={(e) => {getsubData(e.target.value, "image")}} /></Col></Row>
-                    
+            label="Subheading Image"
+            >
+                <ImageUpload handleUpdate={getSubData} />
             </Form.Item>
             <Form.Item
                 label="Subheading Title"
                 >
-                    <Row><Col span={24}><Input value={subheadingTitle} onChange={(e) => {getsubData(e.target.value, "title")}}/></Col></Row>
+                    <Row><Col span={24}><Input value={subheadingTitle} onChange={(e) => {getSubData(e.target.value, "title")}}/></Col></Row>
                     
             </Form.Item>
             <Form.Item
                 label="Subheading Clear Benefit"
                 >
-                    <Row><Col span={24}><Input.TextArea rows={4} value={clearBenefit} onChange={(e) => {getsubData(e.target.value, "clearBenefit")}}/></Col></Row>
+                    <Row><Col span={24}><Input.TextArea rows={4} value={clearBenefit} onChange={(e) => {getSubData(e.target.value, "clearBenefit")}}/></Col></Row>
                     
             </Form.Item>
             <Form.Item
                 label="Action items"
                 >
-                    <Row><Col span={24}><Input.TextArea rows={4} value={actionItems} onChange={(e) => {getsubData(e.target.value, "actionItems")}}/></Col></Row>
+                    <Row><Col span={24}><Input.TextArea rows={4} value={actionItems} onChange={(e) => {getSubData(e.target.value, "actionItems")}}/></Col></Row>
                     
             </Form.Item>
         

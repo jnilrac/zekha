@@ -5,17 +5,18 @@ import Subheading from './Subheading';
 import EditSubheading from './EditSubheading';
 import SubheadingTable from './SubheadingTable';
 
-const Subheaders = ({tableData,state}) => { 
+const Subheaders = ({uid, tableData,state}) => { 
 
 const [data, setData] = tableData;
 const [showEditForm, setShowEditForm] = useState({record:{}, show:false});
 const [template, setTemplate ] = state;
 
+
 const ShowForm = () => {
     if(!showEditForm.show){
-        return <Subheading templateState={[template, setTemplate ]} state={[data, setData]} />;
+        return <Subheading  uid={uid} templateState={[template, setTemplate ]} state={[data, setData]} />;
     }else {
-        return <EditSubheading templateState={[template, setTemplate ]} formShow={[showEditForm, setShowEditForm]} state={[data, setData]}  />
+        return <EditSubheading uid={uid} templateState={[template, setTemplate ]} formShow={[showEditForm, setShowEditForm]} state={[data, setData]}  />
     }
 }
 
