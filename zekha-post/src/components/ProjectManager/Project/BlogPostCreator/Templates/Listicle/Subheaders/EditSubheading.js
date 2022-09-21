@@ -2,6 +2,7 @@ import React, {useState, useRef, useEffect} from 'react'
 import {useImmer} from 'use-immer';
 import {Form, InputNumber, Row, Col, Slider, Input, Space, Button, Divider} from 'antd';
 import ImageUpload from '../../ImageUpload';
+import AiAssist from '../../../../AiAssist';
 
 const { TextArea } = Input;
 
@@ -78,7 +79,14 @@ const EditSubheading = ({uid,templateState ,state, formShow}) => {
             <Form.Item
                 label="Subheading Title"
                 >
-                    <Row><Col span={24}><Input value={subheadingTitle} onChange={(e) => {getSubData(e.target.value, "title")}}/></Col></Row>
+                     <Row gutter={10}>
+                        <Col span={20}>
+                            <Input value={subheadingTitle} onChange={(e) => {getSubData(e.target.value, "title")}}/>
+                        </Col>
+                        <Col span={3}>
+                        <AiAssist handleUpdate={getSubData} templateEvent={'title'}/>
+                        </Col>
+                    </Row>
                     
             </Form.Item>
             <Form.Item
@@ -87,13 +95,14 @@ const EditSubheading = ({uid,templateState ,state, formShow}) => {
                     <Row><Col span={24}><Input.TextArea rows={4} value={clearBenefit} onChange={(e) => {getSubData(e.target.value, "clearBenefit")}}/></Col></Row>
                     
             </Form.Item>
+            <Row justify='center'><AiAssist handleUpdate={getSubData} templateEvent={'clearBenefit'}/></Row>
             <Form.Item
                 label="Action items"
                 >
                     <Row><Col span={24}><Input.TextArea rows={4} value={actionItems} onChange={(e) => {getSubData(e.target.value, "actionItems")}}/></Col></Row>
                     
             </Form.Item>
-        
+            <Row style={{marginBottom:"20px"}} justify='center'><AiAssist handleUpdate={getSubData} templateEvent={'actionItems'}/></Row>
         
      
         <Row justify='center'>

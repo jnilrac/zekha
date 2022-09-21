@@ -3,6 +3,7 @@ import {useImmer} from 'use-immer';
 import {Form, InputNumber, Row, Col, Slider, Input, Space, Upload,Button} from 'antd';
 import { UploadOutlined,  } from '@ant-design/icons';
 import ImageUpload from '../ImageUpload';
+import AiAssist from '../../../AiAssist';
 
 
 
@@ -27,7 +28,14 @@ const Title = ({uid, state}) => {
         <Input.Group>
         
             <Form.Item label="Title">
-                    <Input value={title.topic} onChange={(e) => {handleUpdate(e.target.value, "topic")}}/>
+                <Row gutter={20}>
+                 
+                  <Col span={20}>
+                  <Input value={title.topic} onChange={(e) => {handleUpdate(e.target.value, "topic")}}/></Col>
+                  <Col span={3}>
+                  <AiAssist handleUpdate={handleUpdate} templateEvent={'topic'}/>
+                  </Col>  
+                </Row>        
             </Form.Item>
 
             <Form.Item

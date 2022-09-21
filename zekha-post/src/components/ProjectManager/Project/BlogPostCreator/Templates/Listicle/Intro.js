@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import {Form, InputNumber, Row, Col, Slider, Input, Space} from 'antd';
-
+import AiAssist from '../../../AiAssist';
 const Intro = (props) => {
   const [template, setTemplate] = props.state;
   const [inputValue, setInputValue] = useState(1);
@@ -18,18 +18,17 @@ const Intro = (props) => {
             
             <Form.Item
                 label="Intro Problem"
-                name="problem"
                 >
-                    <Input.TextArea rows={4} onChange={(e) => { handleUpdate(e.target.value, 'problem')}}/>
+                    <Input.TextArea rows={4} value={template.intro.problem} onChange={(e) => { handleUpdate(e.target.value, 'problem')}}/>
             </Form.Item>
-
+            <Row justify='center'><AiAssist handleUpdate={handleUpdate} templateEvent={'problem'}/></Row>
+            
             <Form.Item
                 label="Intro Benefit"
-                name="introBenefit"
                 >
-                    <Input.TextArea  rows={4} onChange={(e) => { handleUpdate(e.target.value, 'introBenefit')}}/>
+                    <Input.TextArea  rows={4} value={template.intro.introBenefit} onChange={(e) => { handleUpdate(e.target.value, 'introBenefit')}}/>
             </Form.Item>
-        
+            <Row justify='center'><AiAssist handleUpdate={handleUpdate} templateEvent={'introBenefit'}/></Row>
         
         </Input.Group>
     </>
