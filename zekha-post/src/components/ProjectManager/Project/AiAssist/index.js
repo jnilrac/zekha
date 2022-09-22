@@ -13,7 +13,7 @@ const AiAssist = ({handleUpdate, templateEvent}) => {
 
   const ShowAssist = () => {
     if(assister){
-      return <AiAssistListicle handleUpdate={handleUpdate} assistShow={[assister, setAssister]}  templateEvent={templateEvent}/>;
+      return <AiAssistListicle update={handleUpdate} assistShow={[assister, setAssister]}  templateEvent={templateEvent}/>;
     }
   }
 
