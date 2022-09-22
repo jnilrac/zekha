@@ -30,14 +30,12 @@ const Title = ({uid, state}) => {
             <Form.Item label="Title">
                 <Row gutter={20}>
                  
-                  <Col span={20}>
+                  <Col span={24}>
                   <Input value={title.topic} onChange={(e) => {handleUpdate(e.target.value, "topic")}}/></Col>
-                  <Col span={3}>
-                  <AiAssist handleUpdate={handleUpdate} templateEvent={'topic'}/>
-                  </Col>  
+  
                 </Row>        
             </Form.Item>
-
+              <Row justify='center'><AiAssist handleUpdate={handleUpdate} templateEvent={'topic'}/></Row>
             <Form.Item
             label="Feature Image"
             >

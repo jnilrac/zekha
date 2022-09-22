@@ -21,7 +21,7 @@ const Subheading = ({templateState, state}) => {
     if(eventType === "heroImage") {
         setSubData(subData => ({...subData, subheadingImage:value}));
     }
-    else if(eventType === "title") {
+    else if(eventType === "subheadingTitle") {
         setSubData(subData => ({...subData, subheadingTitle:value}));
         
     }
@@ -92,10 +92,10 @@ const Subheading = ({templateState, state}) => {
                 >
                     <Row gutter={10}>
                         <Col span={20}>
-                            <Input value={subheadingTitle} onChange={(e) => {getSubData(e.target.value, "title")}}/>
+                            <Input value={subheadingTitle} onChange={(e) => {getSubData(e.target.value, "subheadingTitle")}}/>
                         </Col>
                         <Col span={3}>
-                        <AiAssist handleUpdate={getSubData} templateEvent={'title'}/>
+                        <AiAssist handleUpdate={getSubData} templateEvent={'subheadingTitle'}/>
                         </Col>
                     </Row>
                     

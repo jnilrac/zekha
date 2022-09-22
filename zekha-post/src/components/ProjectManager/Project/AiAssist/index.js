@@ -1,46 +1,35 @@
-import { Button, Modal } from 'antd';
-import React, { useState } from 'react';
+import { Button, Form, Row, Divider } from 'antd';
+import React, { useEffect, useState } from 'react';
+import AiAssistListicle from './AiAssistListicle/index.js';
+import { useImmer } from 'use-immer';
 
 const AiAssist = ({handleUpdate, templateEvent}) => {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [modalText, setModalText] = useState('Content of the modal');
+  const [assister, setAssister] =  useState(false)
 
-  const showModal = () => {
-    setOpen(true);
-  };
+  
 
-  const handleOk = () => {
-    setModalText('The modal will be closed after two seconds');
-    setConfirmLoading(true);
-    setTimeout(() => {
-      setOpen(false);
-      setConfirmLoading(false);
-    }, 2000);
-    handleUpdate('Hello World 1', templateEvent)
-  };
+  const ShowAssist = () => {
+    if(assister){
+      return <AiAssistListicle handleUpdate={handleUpdate} assistShow={[assister, setAssister]}  templateEvent={templateEvent}/>;
+    }
+  }
 
-  const handleCancel = () => {
-    console.log('Clicked cancel button');
-    setOpen(false);
-  };
 
-  return (
+
+  return(
     <>
-      <Button style={{backgroundColor: "purple", color:"white", borderRadius:"5px", opacity:"0.8"}} onClick={showModal}>
-        AI Assist
-      </Button>
-      <Modal
-        title="Title"
-        open={open}
-        onOk={handleOk}
-        confirmLoading={confirmLoading}
-        onCancel={handleCancel}
-      >
-        <p>{modalText}</p>
-      </Modal>
+    <Row><Button onClick={() => {setAssister(!assister)}}>Ai Assist</Button></Row>
+    <Divider />
+    <Row><ShowAssist /></Row>
+    <Divider />
+      
     </>
-  );
+    
+    
+  )
 };
 
 export default AiAssist;

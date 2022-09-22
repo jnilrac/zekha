@@ -46,9 +46,10 @@ const ExportModal = ({keys, hasSelected}) => {
         const docRef = doc(db, "posts", key);
         const docSnap = await getDoc(docRef);
         const snapTitle = docSnap.data().title;
+        const snapTemplateType = docSnap.data().templateType;
         const snapContent = docSnap.data().content;
         const contentDelta = JSON.parse(snapContent);
-        setExportsArray((exportsArray) => ([...exportsArray, {title:snapTitle, content:contentDelta}]))  
+        setExportsArray((exportsArray) => ([...exportsArray, {templateType: snapTemplateType, title:snapTitle, content:contentDelta}]))  
     });
     setDataAdded(true)
   }; 

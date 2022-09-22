@@ -13,7 +13,7 @@ const TemplateCard = ({post ,curTemp, curProj, uid, item, content}) => {
   const {key} = currentProject;
   const [finalPost, setFinalPost] = post;
   const [template, setTemplate] = curTemp;
- const {title} = template;
+ const {title,type} = template;
   const showDrawer = () => {
     setOpen(true);
   };
@@ -42,6 +42,7 @@ const TemplateCard = ({post ,curTemp, curProj, uid, item, content}) => {
     const timestamp =  serverTimestamp();
     // Add a new document with a generated id.
     const docRef = await addDoc(collection(db, "posts"), {
+      templateType: type,
       title: title.topic,
       content: postString,
       postCreator: uid,
