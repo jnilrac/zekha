@@ -91,15 +91,16 @@ const Subheading = ({templateState, state}) => {
                 label="Subheading Title"
                 >
                     <Row gutter={10}>
-                        <Col span={20}>
+                        <Col span={24}>
                             <Input value={subheadingTitle} onChange={(e) => {getSubData(e.target.value, "subheadingTitle")}}/>
                         </Col>
-                        <Col span={3}>
-                        <AiAssist handleUpdate={getSubData} templateEvent={'subheadingTitle'}/>
+                        <Col style={{marginTop: 10}} span={24}>
+                        
                         </Col>
                     </Row>
                     
             </Form.Item>
+            <Row justify='center'><AiAssist handleUpdate={getSubData} templateEvent={'subheadingTitle'}/></Row>
             <Form.Item
                 label="Subheading Clear Benefit"
                 >
