@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react'
 import {Form,Input, Select, Row, Button, Col, Radio, Divider} from 'antd';
 import {useImmer} from "use-immer";
+import { functions } from '../../../../../services/firebase';
+import { getFunctions, httpsCallable } from "firebase/functions";
 const {Option} = Select;
 
 const AiAssistListicle = ({update,assistShow,templateEvent}) => {
@@ -13,58 +15,79 @@ const AiAssistListicle = ({update,assistShow,templateEvent}) => {
   //const {topic, paragraphCount, wordCount} = localData;
   const [assister, setAssister] = assistShow;
  console.log(templateEvent)
+ const functions = getFunctions();
+
+
+
+
+
 
 
 // Completions
  const Completions = () => {
   const [ promptData, setPromptData ] = useState('');
   const [localData, setLocalData] = useImmer({});
-  const {topic, paragraphCount, wordCount, listNum} = localData;
+  const {topic, paragraphCount, wordCount, listNum, keywords} = localData;
 
   const handleUpdate = (event, eventType) => {
     if (eventType === 'topic') setLocalData(draft => {draft.topic = event.target.value})
     else if (eventType === 'paragraphCount') setLocalData(draft => {draft.paragraphCount = event})
     else if (eventType === 'wordCount') setLocalData(draft => {draft.wordCount = event})
     else if (eventType === 'listNum') setLocalData(draft => {draft.listNum = event})
+    else if (eventType === 'keywords') setLocalData(draft => {draft.keywords = event.target.value})
   };
+  //firebase Callable Functions
+  const completionsCall = async () => {
+    console.log(promptData)
+    const getCompletions = httpsCallable(functions, 'openAiCompletion');
+    console.log(promptData)
+    const result = await getCompletions({prompt: promptData, templateEvent: templateEvent});
+    const text = result.data[0].text
+    console.log(text)
+    update(text, templateEvent);     
+  };
+
+  
 
   const sendPrompt = () => {
     if(templateEvent === "topic") {
-      setPromptData(`write a title for an article listing ${listNum} ${topic}.`)
-      update(promptData, 'topic');
+      setPromptData(`Write blog post title, with proper capitalization, and with two adjectives decribing a list of ${listNum} ${topic}.`)
+      completionsCall();
     } else if (templateEvent === "problem")  {
       let paraCount;
       if(paragraphCount > 1) {paraCount = "paragraphs"}
       else {paraCount = 'paragraph'}
       setPromptData(`write ${wordCount} words in ${paragraphCount} ${paraCount} about why ${topic} is a problem.`)
-      update(promptData, 'problem');
+      completionsCall();
     } else if (templateEvent === "introBenefit")  {
       let paraCount;
       if(paragraphCount > 1) {paraCount = "paragraphs"}
       else {paraCount = 'paragraph'}
       setPromptData(`write ${wordCount} words in ${paragraphCount} ${paraCount} about why ${topic} is beneficial.`)
-      update(promptData, 'introBenefit');
-    } else if (templateEvent === "suheadingTitle")  {
+      completionsCall();
+    } else if (templateEvent === "subheadingTitle")  {
+      
       setPromptData(`write a title for an article subheading about ${topic}.`)
-      update(promptData, 'problem');
+      console.log(`this event is ${templateEvent} and the promptData is ${promptData}`)
+      completionsCall();
     } else if (templateEvent === "clearBenefit")  {
       let paraCount;
       if(paragraphCount > 1) {paraCount = "paragraphs"}
       else {paraCount = 'paragraph'}
       setPromptData(`write ${wordCount} words in ${paragraphCount} ${paraCount} about why ${topic} is beneficial.`)
-      update(promptData, 'clearBenefit');
+      completionsCall();
     } else if (templateEvent === "actionItems")  {
       let paraCount;
       if(paragraphCount > 1) {paraCount = "paragraphs"}
       else {paraCount = 'paragraph'}
       setPromptData(`write ${wordCount} words in a bullet list consisting of ${paragraphCount} ${paraCount} about how to benefit from ${topic}.`)
-      update(promptData, 'actionItems');
+      completionsCall();
     }else if (templateEvent === "conclusion")  {
       let paraCount;
       if(paragraphCount > 1) {paraCount = "paragraphs"}
       else {paraCount = 'paragraph'}
       setPromptData(`write a conclusion ${wordCount} words in  ${paragraphCount} ${paraCount} ending with a 1 sentence Call to action about ${topic}.`)
-      update(promptData, 'conclusion');
+      completionsCall();
     }
   
     setAssister(!assister);
@@ -74,7 +97,7 @@ const AiAssistListicle = ({update,assistShow,templateEvent}) => {
 
      useEffect(() => {
       if(templateEvent === "topic") {
-        setPromptData(`write a title for an article listing ${listNum} ${topic}.`)
+        setPromptData(`Write blog post title, with proper capitalization, and with two adjectives decribing a list of ${listNum} ${topic}.`)
       } else if (templateEvent === "problem")  {
         let paraCount;
         if(paragraphCount > 1) {paraCount = "paragraphs"}
@@ -87,7 +110,7 @@ const AiAssistListicle = ({update,assistShow,templateEvent}) => {
         else {paraCount = 'paragraph'}
         setPromptData(`write ${wordCount} words in ${paragraphCount} ${paraCount} about why ${topic} is beneficial.`)
         
-      } else if (templateEvent === "suheadingTitle")  {
+      } else if (templateEvent === "subheadingTitle")  {
         setPromptData(`write a subheading title about ${topic}.`)
         
       } else if (templateEvent === "clearBenefit")  {
@@ -113,6 +136,13 @@ const AiAssistListicle = ({update,assistShow,templateEvent}) => {
      if(templateEvent === "subheadingTitle") {
       return(
         <Row >
+          <Col style={{marginBottom:20}} span={24}>
+             <center><h2>what keywords must be included?</h2></center>
+             <center><p>Separate each keyword or phrase with a comma.</p></center>
+          </Col>
+          <Col style={{marginBottom:20}} span={24}>
+               <Input value={keywords} onChange={e => {handleUpdate(e, "keywords")}}/>
+          </Col>
           <Col style={{marginBottom:20}} span={24}>
              <center><h2>What's the topic?</h2></center>
           </Col>
@@ -151,6 +181,13 @@ const AiAssistListicle = ({update,assistShow,templateEvent}) => {
       return (
         <Col offset={6} span={12}>
             <Row justify='center'>
+            <Col style={{marginBottom:20}} span={24}>
+                <center><h2>what keywords must be included?</h2></center>
+                <center><p>Separate each keyword or phrase with a comma.</p></center>
+            </Col>
+          <Col style={{marginBottom:20}} span={24}>
+               <Input value={keywords} onChange={e => {handleUpdate(e, "keywords")}}/>
+          </Col>
                   
             <Col  style={{marginBottom:20}} span={24}>
               <h2>Word Count:</h2>
@@ -229,27 +266,43 @@ const AiAssistListicle = ({update,assistShow,templateEvent}) => {
  
 
   const Summarization = () => {
-    const [summary, setSummary] = useImmer('');
+    const [summary, setSummary] = useImmer({});
+    const {text, keywords} =  summary;
     console.log(summary);
 
+    //firebase Callable Function
+  const summarizationCall = async () => {
+    const getCompletions = httpsCallable(functions, 'openAiSummary');
+    const result = await getCompletions(summary);
+    update(result, templateEvent);      
+  }   
+
     const handleSummaryUpdate = (event, eventType) => {
-      setSummary(event.target.value)
+      setSummary({event:event.target.value})
+      if (eventType === 'summary') setSummary(draft => {draft.text = event.target.value});
+      if (eventType === 'keywords') setSummary(draft => {draft.keywords = event.target.value})
     }
   
     const sendSummary = () => {
-      
-      update(summary, 'problem');
+      summarizationCall();
       setAssister(!assister);
     };
   
     return(
         <div style={{width:"80em"}}>
           <Row style={{width:"100%"}} justify='center'>
+          <Col style={{marginBottom:20}} span={24}>
+             <center><h2>what keywords must be included?</h2></center>
+             <center><p>Separate each keyword or phrase with a comma.</p></center>
+          </Col>
+          <Col style={{marginBottom:20}} span={24}>
+               <Input value={keywords} onChange={e => {handleSummaryUpdate(e, "keywords")}}/>
+          </Col>
             <Col span={24}>
             <p>Paste text you want to summarize here.</p>
             </Col>
             <Col span={24}>
-              <Input.TextArea rows={10} value={summary} onChange={e => {handleSummaryUpdate(e)}}/>
+              <Input.TextArea rows={10} value={text} onChange={e => {handleSummaryUpdate(e)}}/>
 
             </Col>
             <Col  span={24}>

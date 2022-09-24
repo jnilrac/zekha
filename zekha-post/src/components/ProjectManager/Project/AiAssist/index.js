@@ -4,9 +4,6 @@ import AiAssistListicle from './AiAssistListicle/index.js';
 import { useImmer } from 'use-immer';
 
 const AiAssist = ({handleUpdate, templateEvent}) => {
-  const [open, setOpen] = useState(false);
-  const [confirmLoading, setConfirmLoading] = useState(false);
-  const [modalText, setModalText] = useState('Content of the modal');
   const [assister, setAssister] =  useState(false)
 
   
