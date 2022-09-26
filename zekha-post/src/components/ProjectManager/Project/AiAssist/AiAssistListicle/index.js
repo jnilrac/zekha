@@ -263,24 +263,27 @@ const AiAssistListicle = ({update,assistShow,templateEvent}) => {
 
   //Summarization
 
- 
+
 
   const Summarization = () => {
     const [summary, setSummary] = useImmer({});
     const {text, keywords} =  summary;
-    console.log(summary);
+ 
+
+
 
     //firebase Callable Function
   const summarizationCall = async () => {
     const getCompletions = httpsCallable(functions, 'openAiSummary');
     const result = await getCompletions(summary);
-    update(result, templateEvent);      
+    const summaryDisplay = result.data[0].text;
+    update(summaryDisplay, templateEvent);     
   }   
 
     const handleSummaryUpdate = (event, eventType) => {
-      setSummary({event:event.target.value})
       if (eventType === 'summary') setSummary(draft => {draft.text = event.target.value});
       if (eventType === 'keywords') setSummary(draft => {draft.keywords = event.target.value})
+      
     }
   
     const sendSummary = () => {
@@ -302,7 +305,7 @@ const AiAssistListicle = ({update,assistShow,templateEvent}) => {
             <p>Paste text you want to summarize here.</p>
             </Col>
             <Col span={24}>
-              <Input.TextArea rows={10} value={text} onChange={e => {handleSummaryUpdate(e)}}/>
+              <Input.TextArea rows={10} value={text} onChange={e => {handleSummaryUpdate(e, "summary")}}/>
 
             </Col>
             <Col  span={24}>
