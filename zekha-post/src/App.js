@@ -15,7 +15,8 @@ import SignUp from "./components/SignUp.js";
 
 function App() {
   return (
-    <Routes>
+   
+      <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/Login" element={<Login />} />
@@ -26,6 +27,8 @@ function App() {
         </Route>
         
       </Routes>
+ 
+    
   );
 }
 

@@ -23,36 +23,40 @@ const Listicle = ({post,curTemp, curProj, uid}) => {
  console.log(template)
 
   const CycleSteps = () => {
-    return step === 0 ? <Title uid={uid} state={[template, setTemplate]} /> 
-    :step === 1 ? <Intro state={[template, setTemplate]} /> 
-    : step === 2 ? <Subheaders uid={uid} tableData={[data, setData] } state={[template, setTemplate]} /> 
-    : step === 3 ? <Conclusion state={[template, setTemplate]} /> 
-    : step === 4 ? <Editor post={[finalPost, setFinalPost]} state={[template, setTemplate]} /> 
+    return step === 0 ? <Title uid={uid} stepper={[step, setStep]} state={[template, setTemplate]} /> 
+    :step === 1 ? <Intro stepper={[step, setStep]} state={[template, setTemplate]} /> 
+    : step === 2 ? <Subheaders stepper={[step, setStep]} uid={uid} tableData={[data, setData] } state={[template, setTemplate]} /> 
+    : step === 3 ? <Conclusion stepper={[step, setStep]} state={[template, setTemplate]} /> 
+    : step === 4 ? <Editor stepper={[step, setStep]} post={[finalPost, setFinalPost]} state={[template, setTemplate]} /> 
     : null
   };
 
   const ShowSubheadings = () => {
     return template.subheadings.map((sub) =>{
-      return <h1 key={sub.key}>{sub.subheadingTitle}</h1> 
+      return (
+        <>
+        <h1 key={sub.key}>{sub.subheadingTitle}</h1> 
+        <Divider />
+        <img style={{width:500}} src={sub.subheadingImage} />
+        </>
+      
+      )
     })
   };
 
   const CyclePreviews = () => {
     return step === 0 ? 
     <>
-    <Row justify='center'><Button size="large" onClick={() =>{setStep(1)}} type="primary">Next</Button></Row>
+    
     <Divider />
     <Row justify='center'><h2>Title Preview:</h2></Row>
     <Row justify='center'><h1>{`${title.topic}`}</h1></Row>
-    <Row style={{margintTop:"200px"}} justify='center'><img style={{width:'750px', margin:"20px"}}src={`${heroImage}`} /></Row>
+    <Row style={{margintTop:"200px"}} justify='center'><img style={{width:'750px', margin:"20px"}}src={`${heroImage.url}`} /></Row>
     
     </>
     :step === 1 ? 
     <>
-    <Row justify='center'> <Space>
-        <Col ><Button size="large" onClick={() =>{setStep(0)}} type="primary">Prev</Button></Col>
-        <Col ><Button size="large" onClick={() =>{setStep(2)}} type="primary">Next</Button></Col>
-      </Space></Row>
+    
      <Divider />
     <Row justify='center'><h2>Intro Preview:</h2></Row>
     <Row justify='center'><h1>{`${intro.problem}`}</h1></Row>
@@ -64,11 +68,7 @@ const Listicle = ({post,curTemp, curProj, uid}) => {
     </>
     :step === 2 ? 
     <>
-    <Row justify='center'> <Space>
-        <Col ><Button size="large" onClick={() =>{setStep(1)}} type="primary">Prev</Button></Col>
-        <Col ><Button size="large" onClick={() =>{setStep(3)}} type="primary">Next</Button></Col>
-      </Space></Row>
-     <Divider />
+    
     <Row justify='center'><h2>Subheading Preview:</h2></Row>
     <Row justify='center'><ShowSubheadings /></Row>
     <Row justify='center'>
@@ -78,11 +78,8 @@ const Listicle = ({post,curTemp, curProj, uid}) => {
     </>
     :step === 3 ? 
     <>
-    <Row justify='center'> <Space>
-        <Col ><Button size="large" onClick={() =>{setStep(2)}} type="primary">Prev</Button></Col>
-        <Col ><Button size="large" onClick={() =>{setStep(4)}} type="primary">Next</Button></Col>
-      </Space></Row>
-     <Divider />
+ 
+     
     <Row justify='center'><h2>Conslusion Preview:</h2></Row>
     <Row justify='center'>{`${conclusion}`}</Row>
     <Row justify='center'>

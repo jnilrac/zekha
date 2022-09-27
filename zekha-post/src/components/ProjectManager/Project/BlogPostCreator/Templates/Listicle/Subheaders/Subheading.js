@@ -7,7 +7,7 @@ const { TextArea } = Input;
 
 
 
-const Subheading = ({templateState, state}) => {
+const Subheading = ({templateState, state, uid}) => {
     
     const [subData, setSubData] = useState({});
     const [data, setData] = state;
@@ -19,7 +19,7 @@ const Subheading = ({templateState, state}) => {
     
    const getSubData = (value, eventType) => {
     if(eventType === "heroImage") {
-        setSubData(subData => ({...subData, subheadingImage:value}));
+        setSubData(subData => ({...subData, subheadingImage:value.url, subheadingImageRef:value.ref}));
     }
     else if(eventType === "subheadingTitle") {
         setSubData(subData => ({...subData, subheadingTitle:value}));
@@ -57,7 +57,7 @@ const Subheading = ({templateState, state}) => {
   },[template])
 
   const DisableButton = () => {
-    if(!subheadingImage || !subheadingTitle || !clearBenefit){
+    if(!subheadingImage || !subheadingTitle || !clearBenefit || !actionItems){
         return (
             <Row justify='center'>
             <Space>
@@ -85,7 +85,7 @@ const Subheading = ({templateState, state}) => {
             <Form.Item
             label="Subheading Image"
             >
-                <ImageUpload handleUpdate={getSubData} />
+                <ImageUpload uid={uid} handleUpdate={getSubData} />
             </Form.Item>
             <Form.Item
                 label="Subheading Title"

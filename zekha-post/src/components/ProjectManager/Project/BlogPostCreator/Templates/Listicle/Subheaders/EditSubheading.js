@@ -16,15 +16,15 @@ const EditSubheading = ({uid,templateState ,state, formShow}) => {
     const [data, setData] = state;
     const {record} = showEditForm;
     const [subData, setSubData] = useState(record);
-    const {subheadingImage,subheadingTitle,clearBenefit, actionItems} = subData;
-    console.log(subData)
+    const {subheadingImage,subheadingTitle,clearBenefit, actionItems, subheadingImageRef} = subData;
+   
 
 
 
     
    const getSubData = (value, eventType) => {
-    if(eventType === "image") {
-        setSubData(subData => ({...subData, subheadingImage:value}));
+    if(eventType === "heroImage") {
+        setSubData(subData => ({...subData, subheadingImage:value.url, subheadingImageRef:value.ref}));
     }
     else if(eventType === "subheadingTitle") {
         setSubData(subData => ({...subData, subheadingTitle:value}));
@@ -63,7 +63,33 @@ const EditSubheading = ({uid,templateState ,state, formShow}) => {
 
 
 
-
+    const DisableButton = () => {
+        if(
+            subheadingImage.length < 1 || 
+            subheadingTitle.length < 1 || 
+            clearBenefit.length < 1 || 
+            actionItems.length < 1 
+             ){
+            return (
+                <Row justify='center'>
+                <Space>
+                <Button type="primary" disabled={true} onClick={editSubheading}>Edit Subheading</Button>
+                <Button type="danger" onClick={cancelEdit}>Cancel</Button>
+                </Space>
+                
+            </Row>
+            );
+        } else {
+            return (
+                <Row justify='center'>
+                <Space>
+                <Button type="primary" onClick={editSubheading}>Edit Subheading</Button>
+                <Button type="danger" onClick={cancelEdit}>Cancel</Button>
+                </Space>      
+            </Row>
+            );
+        }
+      }
 
 
   return (
@@ -73,7 +99,7 @@ const EditSubheading = ({uid,templateState ,state, formShow}) => {
        <Form.Item
             label="Subheading Image"
             >
-                <ImageUpload uid={uid} handleUpdate={getSubData} />
+                <ImageUpload oldRef={subheadingImageRef} uid={uid} handleUpdate={getSubData} />
             </Form.Item>
 
             <Form.Item
@@ -104,13 +130,7 @@ const EditSubheading = ({uid,templateState ,state, formShow}) => {
             <Row style={{marginBottom:"20px"}} justify='center'><AiAssist handleUpdate={getSubData} templateEvent={'actionItems'}/></Row>
         
      
-        <Row justify='center'>
-                <Space>
-                <Button type="primary" onClick={editSubheading}>Edit Subheading</Button>
-                <Button type="danger" onClick={cancelEdit}>Cancel</Button>
-                </Space>
-                
-            </Row>
+      <DisableButton />
     </div>
   ) 
 }

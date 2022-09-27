@@ -1,33 +1,67 @@
-import React, {useCallback} from 'react';
+import React, {useState} from 'react';
 import {useImmer} from 'use-immer';
-import {Form, InputNumber, Row, Col, Slider, Input, Space, Upload,Button} from 'antd';
+import {Form, InputNumber, Row, Col, Slider, Input, Space, Upload,Button, Divider} from 'antd';
 import { UploadOutlined,  } from '@ant-design/icons';
 import ImageUpload from '../ImageUpload';
 import AiAssist from '../../../AiAssist';
 
 
 
-const Title = ({uid, state}) => {
-  
+const Title = ({uid, state, stepper}) => {
+  const [step, setStep] = stepper;
   const [template, setTemplate] = state;
+  const [isTitleError, setIsTitleError] = useState('');
+  const [titleVal, setTitleVal] = useState('');
+  const [isImageError, setIsImageError] = useState('');
+  const [imageVal, setImageVal] = useState('');
   
   const {title, heroImage} = template;
 
   const handleUpdate = (event, eventType) => {
-    if (eventType === 'topic') setTemplate(draft => {draft.title.topic = event})
-    else if (eventType === 'heroImage') setTemplate(draft => {draft.heroImage = event})
+    if (eventType === 'topic') {
+      setIsTitleError('');
+      setTitleVal('');
+      setTemplate(draft => {draft.title.topic = event});
+  }
+    else if (eventType === 'heroImage') {
+      setIsImageError('');
+      setImageVal('');
+      setTemplate(draft => {draft.heroImage = event});
+    }
   };
   const onChange = ({ file, fileList }) => {
    console.log(file)
   };
 
+  const validate = () => {
+    
+    if(title.topic.length < 1 || heroImage.length < 1) {
+      if(title.topic.length < 1) {
+        setIsTitleError('error'); 
+        setTitleVal('Title is required!')
+      }
+      if(heroImage.length < 1) {
+        setIsImageError('error'); 
+        setImageVal('Feature Image is required!')
+      }
+      
+      return;
+    }
+     setStep(1)
+  };
  
 
   return (
     <>
+    <Row justify='center'><Button size="large" onClick={validate} type="primary">Next</Button></Row>
+      <Divider />
         <Input.Group>
         
-            <Form.Item label="Title">
+            <Form.Item 
+              validateStatus={isTitleError}
+              help= {titleVal}
+              label="Title"
+              >
                 <Row gutter={20}>
                  
                   <Col span={24}>
@@ -38,6 +72,8 @@ const Title = ({uid, state}) => {
               <Row justify='center'><AiAssist handleUpdate={handleUpdate} templateEvent={'topic'}/></Row>
             <Form.Item
             label="Feature Image"
+            validateStatus={isImageError}
+            help= {imageVal}
             >
             <ImageUpload handleUpdate={handleUpdate} uid={uid} />
             </Form.Item>

@@ -1,5 +1,5 @@
 import { UploadOutlined } from '@ant-design/icons';
-import { Button, message, Upload } from 'antd';
+import { Button, message, Upload, Popconfirm } from 'antd';
 import { storage } from '../../../../../services/firebase';
 import {getDownloadURL, ref, uploadBytes, deleteObject} from 'firebase/storage';
 import React, {useState, useEffect} from 'react';
@@ -7,16 +7,14 @@ import React, {useState, useEffect} from 'react';
 
 
 
-const ImageUpload = ({handleUpdate ,uid}) => {
+const ImageUpload = ({handleUpdate ,uid, oldRef}) => {
         const [uploadState, setUploadState ] = useState({loading: false, imageUrl:''})
         const {imageUrl} = uploadState;
         const [removeableFile, setRemoveableFile] =  useState(null);
-       console.log(removeableFile)
-      
+       
 
         const beforeUpload = async (file, fileList) => { 
             if(removeableFile !== null) {
-                //const removeImageRef = ref(storage, `images/${uid}/${removeableFile.name}`)
                 await deleteObject(removeableFile).then(() => {       
                   setUploadState(uploadState => ({...uploadState, imageUrl:''}));
                  
@@ -25,6 +23,16 @@ const ImageUpload = ({handleUpdate ,uid}) => {
                    // Uh-oh, an error occurred!
                  });
             }
+            if(oldRef) {
+              await deleteObject(oldRef).then(() => {       
+                setUploadState(uploadState => ({...uploadState, imageUrl:''}));
+               
+                 // File deleted successfully
+               }).catch((error) => {
+                 // Uh-oh, an error occurred!
+               });
+          }
+           
           const isImage = file.type.includes('image')
           if (!isImage) {
             message.error(`${file.name} is not an accepted image file`);
@@ -43,6 +51,7 @@ const ImageUpload = ({handleUpdate ,uid}) => {
             try {
               const image = await uploadBytes(imageRef, file).then((snapshot) => {console.log('Uploaded a blob or file!');});
               setRemoveableFile(imageRef);
+
               onSuccess(null, image);
              
             } catch(e) {
@@ -60,7 +69,7 @@ const ImageUpload = ({handleUpdate ,uid}) => {
               
                 const imageRef = ref(storage, `images/${uid}/${info.file.name}`)
                 const thisImageUrl = await getDownloadURL(imageRef);
-                handleUpdate(thisImageUrl,'heroImage')
+                handleUpdate({url:thisImageUrl, ref:imageRef},'heroImage')
                setUploadState(uploadState => ({...uploadState, imageUrl:thisImageUrl, loading: false}));
                 
             }
@@ -81,6 +90,8 @@ const ImageUpload = ({handleUpdate ,uid}) => {
               setRemoveableFile(null);
               
         }
+
+        
     
  return(
     <Upload
@@ -89,7 +100,7 @@ const ImageUpload = ({handleUpdate ,uid}) => {
           customRequest={customUpload} 
           onRemove ={handleRemove}
           maxCount={1}
-          
+               
     >
     <Button icon={<UploadOutlined />}>Upload Image</Button>
   </Upload>
