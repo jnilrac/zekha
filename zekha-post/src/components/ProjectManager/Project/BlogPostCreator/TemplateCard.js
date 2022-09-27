@@ -7,12 +7,15 @@ import { db } from '../../../../services/firebase';
 
 
 
-const TemplateCard = ({post ,curTemp, curProj, uid, item, content}) => {
+const TemplateCard = ({post ,curTemp, curProj, uid, item, content, submitButton}) => {
   const [open, setOpen] = useState(false);
   const [currentProject, setCurrentProject] = curProj;
   const {key} = currentProject;
   const [finalPost, setFinalPost] = post;
   const [template, setTemplate] = curTemp;
+  const [submitDisabled, setSubmitDisabled] = submitButton;
+  
+
  const {title,type} = template;
   const showDrawer = () => {
     setOpen(true);
@@ -65,6 +68,7 @@ const TemplateCard = ({post ,curTemp, curProj, uid, item, content}) => {
   
   }, [key])
 
+
   return (
     <>
       
@@ -83,7 +87,7 @@ const TemplateCard = ({post ,curTemp, curProj, uid, item, content}) => {
         extra={
           <Space>
             <Button onClick={onClose}>Cancel</Button>
-            <Button onClick={addPost} type="primary">
+            <Button disabled={submitDisabled} onClick={addPost} type="primary">
               Submit
             </Button>
           </Space>

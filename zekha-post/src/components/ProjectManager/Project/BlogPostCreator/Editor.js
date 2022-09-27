@@ -3,14 +3,19 @@ import ReactQuill, {Quill, handlers} from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { Divider, Input, Row } from 'antd';
 
-const Editor = ({post,uid, state}) => {
+const Editor = ({post,uid, state, submitButton}) => {
   const [template, setTemplate] = state;
   const [finalPost, setFinalPost] = post;
+  const [ submitDisabled, setSubmitDisabled ] = submitButton;
  console.log(uid)
+
+ if(submitDisabled){
+  setSubmitDisabled(false);
+ }
   const data = () => {
     
       const title = `<h1>${template.title.topic}</h1>`;
-      const heroimage = `<img src=${template.heroImage} />`;
+      const heroimage = `<img src=${template.heroImage.url} />`;
       const introProblem = `<p>${template.intro.problem}</p>`;
       const introBenefit = `<p>${template.intro.introBenefit}</p>`;
 

@@ -12,7 +12,7 @@ const {Step} = Steps;
 
 
 
-const Listicle = ({post,curTemp, curProj, uid}) => {
+const Listicle = ({post,curTemp, curProj, uid, submitButton}) => {
   const [currentProject, setCurrentProject] = curProj;
   const [template, setTemplate] = curTemp;
   const [finalPost, setFinalPost] = post;
@@ -26,8 +26,8 @@ const Listicle = ({post,curTemp, curProj, uid}) => {
     return step === 0 ? <Title uid={uid} stepper={[step, setStep]} state={[template, setTemplate]} /> 
     :step === 1 ? <Intro stepper={[step, setStep]} state={[template, setTemplate]} /> 
     : step === 2 ? <Subheaders stepper={[step, setStep]} uid={uid} tableData={[data, setData] } state={[template, setTemplate]} /> 
-    : step === 3 ? <Conclusion stepper={[step, setStep]} state={[template, setTemplate]} /> 
-    : step === 4 ? <Editor stepper={[step, setStep]} post={[finalPost, setFinalPost]} state={[template, setTemplate]} /> 
+    : step === 3 ? <Conclusion  stepper={[step, setStep]} state={[template, setTemplate]} /> 
+    : step === 4 ? <Editor submitButton={submitButton} stepper={[step, setStep]} post={[finalPost, setFinalPost]} state={[template, setTemplate]} /> 
     : null
   };
 

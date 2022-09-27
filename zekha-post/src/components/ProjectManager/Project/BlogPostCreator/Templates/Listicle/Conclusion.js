@@ -7,6 +7,7 @@ const Conclusion = ({state, stepper}) => {
   const [step, setStep] = stepper;
   const [isConclusionError, setIsConclusionError] = useState('');
   const [conclusionVal, setConclusionVal] = useState('');
+  
  
   const handleUpdate = (event, eventType) => {
     setConclusionVal('');
