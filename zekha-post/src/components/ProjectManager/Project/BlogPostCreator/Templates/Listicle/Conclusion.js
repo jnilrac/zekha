@@ -1,13 +1,15 @@
 import React, {useState, useEffect} from 'react'
 import {Form, InputNumber, Row, Col, Slider, Input, Space, Divider, Button} from 'antd';
+import {useImmer} from 'use-immer';
 import AiAssist from '../../../AiAssist';
+import SectionEditor from './SectionEditor';
 
 const Conclusion = ({state, stepper}) => {
   const [template, setTemplate] = state;
   const [step, setStep] = stepper;
   const [isConclusionError, setIsConclusionError] = useState('');
   const [conclusionVal, setConclusionVal] = useState('');
-  
+  const [quillText, setQuillText] = useImmer({});
  
   const handleUpdate = (event, eventType) => {
     setConclusionVal('');
@@ -17,7 +19,7 @@ const Conclusion = ({state, stepper}) => {
 
   const validate = () => {
     
-    if(template.conclusion.length < 1) {
+    if(quillText.conclusion === '\n') {
       setIsConclusionError('error'); 
       setConclusionVal('Conclusion is required!')
       return;
@@ -41,7 +43,7 @@ const Conclusion = ({state, stepper}) => {
                 help={conclusionVal}
                 validateStatus={isConclusionError}
                 >
-                    <Input.TextArea rows={4} value={template.conclusion} onChange={(e) => { handleUpdate(e.target.value, 'conclusion')}}/>
+                    <SectionEditor section={'conclusion'} text={[quillText, setQuillText]} value={template.conclusion} onChange={(e) => { handleUpdate(e, 'conclusion')}}/>
             </Form.Item>
     
         </Input.Group>

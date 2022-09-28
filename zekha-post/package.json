@@ -10,6 +10,7 @@
     "antd": "^4.23.0",
     "craco-less": "^2.0.0",
     "firebase": "^9.9.4",
+    "html-react-parser": "^3.0.4",
     "immer": "^9.0.15",
     "quill-image-uploader": "^1.2.3",
     "react": "^18.2.0",

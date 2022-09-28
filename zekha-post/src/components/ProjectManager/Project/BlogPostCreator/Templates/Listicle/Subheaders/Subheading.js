@@ -3,12 +3,13 @@ import {useImmer} from 'use-immer';
 import {Form, InputNumber, Row, Col, Slider, Input, Space, Button, Divider} from 'antd';
 import ImageUpload from '../../ImageUpload';
 import AiAssist from '../../../../AiAssist';
+import SectionEditor from '../SectionEditor';
 const { TextArea } = Input;
 
 
 
 const Subheading = ({templateState, state, uid}) => {
-    
+    const [quillText, setQuillText] = useImmer({});
     const [subData, setSubData] = useState({});
     const [data, setData] = state;
     const [template, setTemplate ] = templateState;
@@ -104,14 +105,14 @@ const Subheading = ({templateState, state, uid}) => {
             <Form.Item
                 label="Subheading Clear Benefit"
                 >
-                    <Row><Col span={24}><Input.TextArea rows={4} value={clearBenefit} onChange={(e) => {getSubData(e.target.value, "clearBenefit")}}/></Col></Row>
+                    <Row><Col span={24}><SectionEditor section={"clearBenefit"} text={[quillText, setQuillText]} value={clearBenefit} onChange={(e) => {getSubData(e, "clearBenefit")}}/></Col></Row>
                     
             </Form.Item>
             <Row justify='center'><AiAssist handleUpdate={getSubData} templateEvent={'clearBenefit'}/></Row>
             <Form.Item
                 label="Action items"
                 >
-                    <Row><Col span={24}><Input.TextArea rows={4} value={actionItems} onChange={(e) => {getSubData(e.target.value, "actionItems")}}/></Col></Row>
+                    <Row><Col span={24}><SectionEditor section={"actionItems"} text={[quillText, setQuillText]} value={actionItems} onChange={(e) => {getSubData(e, "actionItems")}}/></Col></Row>
                     
             </Form.Item>
             <Row style={{marginBottom:"20px"}} justify='center'><AiAssist handleUpdate={getSubData} templateEvent={'actionItems'}/></Row>

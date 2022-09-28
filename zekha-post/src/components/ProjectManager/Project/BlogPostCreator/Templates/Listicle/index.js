@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
-import { Button, Col, DatePicker, Drawer, Form, Input, Row, Select, Space, List, Card, Divider, Steps } from 'antd';
+import { Button, Col, DatePicker, Drawer, Form, Input, Row, Select, Space, List, Card, Divider, Steps, Modal } from 'antd';
 import {useImmer} from 'use-immer';
+import parse from 'html-react-parser';
 import Title from './Title';
 import Intro from './Intro';
 import Subheaders from './Subheaders';
@@ -34,73 +35,128 @@ const Listicle = ({post,curTemp, curProj, uid, submitButton}) => {
   const ShowSubheadings = () => {
     return template.subheadings.map((sub) =>{
       return (
-        <>
-        <h1 key={sub.key}>{sub.subheadingTitle}</h1> 
-        <Divider />
-        <img style={{width:500}} src={sub.subheadingImage} />
-        </>
+      
+          <>
+           <Row justify='center'>
+             <h3 key={sub.key}>{sub.subheadingTitle}</h3> 
+           </Row>
+           <Row justify='center'>
+            <img style={{maxWidth:400, margin:50}} alt="" src={sub.subheadingImage} />
+           </Row>
+           <Row>
+           
+             <span>{ parse(sub.clearBenefit + sub.actionItems)}</span>
+          
+            
+           
+           </Row>         
+          </>
+       
+        
       
       )
     })
   };
 
   const CyclePreviews = () => {
+    const [open, setOpen] = useState(false);
+
+    const showImage = () => {
+      if(heroImage.url){
+        return <img alt="" style={{maxWidth:'600px', margin:"20px"}}src={`${heroImage.url}`} />;
+      } 
+    }
+
+  
     return step === 0 ? 
-    <>
-    
-    <Divider />
-    <Row justify='center'><h2>Title Preview:</h2></Row>
-    <Row justify='center'><h1>{`${title.topic}`}</h1></Row>
-    <Row style={{margintTop:"200px"}} justify='center'><img style={{width:'750px', margin:"20px"}}src={`${heroImage.url}`} /></Row>
-    
-    </>
+    <Row justify='center'>
+      <Button type="primary" onClick={() => setOpen(true)}>
+        Post Preview
+      </Button>
+      <Modal
+        title="Here's what your title and feature image will look like."
+        centered
+        open={open}
+        onOk={() => setOpen(false)}
+        onCancel={() => setOpen(false)}
+        width={"100%"}
+        footer={null}
+      >
+       
+        <Row justify='center'><h1>{`${title.topic}`}</h1></Row>
+        <Row style={{marginTop:"30px", marginBottom:50}} justify='center'>{showImage()}</Row>
+      </Modal>
+    </Row>
     :step === 1 ? 
-    <>
-    
-     <Divider />
-    <Row justify='center'><h2>Intro Preview:</h2></Row>
-    <Row justify='center'><h1>{`${intro.problem}`}</h1></Row>
-    <Row justify='center'><h1>{`${intro.introBenefit}`}</h1></Row>
     <Row justify='center'>
-
+      <Button type="primary" onClick={() => setOpen(true)}>
+          Post Preview
+        </Button>
+        <Modal
+          title="This is your post with the introduction added."
+          centered
+          open={open}
+          onOk={() => setOpen(false)}
+          onCancel={() => setOpen(false)}
+          width={"100%"}
+          footer={null}
+        >
+        
+          <Row justify='center'><h1>{`${title.topic}`}</h1></Row>
+          <Row style={{marginTop:"30px", marginBottom:50}} justify='center'>{showImage()}</Row>
+          <Row justify='center'><Col span={14}>{parse(intro.problem)}{parse(intro.introBenefit)}</Col></Row>
+        </Modal>
     </Row>
-    
-    </>
+  
     :step === 2 ? 
-    <>
-    
-    <Row justify='center'><h2>Subheading Preview:</h2></Row>
-    <Row justify='center'><ShowSubheadings /></Row>
     <Row justify='center'>
-
-    </Row>
-    
-    </>
+    <Button type="primary" onClick={() => setOpen(true)}>
+        Post Preview
+      </Button>
+      <Modal
+        title="This is your post with the subheadings added."
+        centered
+        open={open}
+        onOk={() => setOpen(false)}
+        onCancel={() => setOpen(false)}
+        width={"100%"}
+        footer={null}
+      >
+      
+        <Row justify='center'><h1>{`${title.topic}`}</h1></Row>
+        <Row style={{marginTop:"30px", marginBottom:50}} justify='center'>{showImage()}</Row>
+        <Row justify='center'><Col span={14}>{parse(intro.problem)}{parse(intro.introBenefit)}</Col></Row>
+       <Row justify='center'><Col span={14}><ShowSubheadings /></Col></Row>
+      </Modal>
+  </Row>
+  
     :step === 3 ? 
-    <>
- 
-     
-    <Row justify='center'><h2>Conslusion Preview:</h2></Row>
-    <Row justify='center'>{`${conclusion}`}</Row>
-    <Row justify='center'>
 
-    </Row>
-    
-    </>
-    :step === 4 ? 
-    <>
-    <Row justify='center'> <Space>
-        <Col ><Button size="large" onClick={() =>{setStep(3)}} type="primary">Prev</Button></Col>
-      </Space></Row>
-     <Divider />
-    <Row justify='center'><h2>Subheading Preview:</h2></Row>
-    <Row justify='center'><ShowSubheadings /></Row>
-    <Row justify='center'>
 
-    </Row>
+    <Row justify='center'>
+    <Button type="primary" onClick={() => setOpen(true)}>
+        Post Preview
+      </Button>
+      <Modal
+        title="This is your post with the conclusion added."
+        centered
+        open={open}
+        onOk={() => setOpen(false)}
+        onCancel={() => setOpen(false)}
+        width={"100%"}
+        footer={null}
+      >
+      
+        <Row justify='center'><h1>{`${title.topic}`}</h1></Row>
+        <Row style={{marginTop:"30px", marginBottom:50}} justify='center'>{showImage()}</Row>
+        <Row justify='center'><Col span={14}>{parse(intro.problem)}{parse(intro.introBenefit)}</Col></Row>
+       <Row justify='center'><Col span={14}><ShowSubheadings /></Col></Row>
+       <Row style={{marginTop:10}} justify='center'><Col span={14}>{parse(conclusion)}</Col></Row>
+      </Modal>
+  </Row>
     
-    </>
-    : null
+    :step === 4 ? null:
+    null
   };
 
    

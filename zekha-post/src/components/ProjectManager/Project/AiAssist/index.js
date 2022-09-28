@@ -21,7 +21,7 @@ const AiAssist = ({handleUpdate, templateEvent}) => {
     <Row><Button onClick={() => {setAssister(!assister)}}>Ai Assist</Button></Row>
     <Divider />
     <Row><ShowAssist /></Row>
-    <Divider />
+   
       
     </>
     

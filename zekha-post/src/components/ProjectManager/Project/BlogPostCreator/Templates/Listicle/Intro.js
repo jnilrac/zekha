@@ -1,6 +1,10 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import {Form, InputNumber, Row, Col, Slider, Input, Space, Button, Divider} from 'antd';
 import AiAssist from '../../../AiAssist';
+import SectionEditor from './SectionEditor';
+import {useImmer} from 'use-immer';
+import parse from "html-react-parser";
+
 const Intro = ({state, stepper}) => {
   const [step, setStep] = stepper;
   const [template, setTemplate] = state;
@@ -8,9 +12,13 @@ const Intro = ({state, stepper}) => {
   const [problemVal, setProblemVal] = useState('');
   const [isBenefitError, setIsBenefitError] = useState('');
   const [benefitVal, setBenefitVal] = useState('');
+  const [quillText, setQuillText] = useImmer({});
+  console.log(quillText)
   
 
+
   const handleUpdate = (event, eventType) => {
+    
     if (eventType === 'problem') {
       setIsProblemError('');
       setProblemVal('')
@@ -25,12 +33,14 @@ const Intro = ({state, stepper}) => {
   };
   const validate = () => {
     
-    if(template.intro.problem < 1 || template.intro.introBenefit < 1) {
-      if(template.intro.problem < 1) {
+    if(quillText.problem === '\n'|| quillText.introBenefit === '\n') {
+      console.log('conditions met')
+      if(quillText.problem === '\n') {
+        
         setIsProblemError('error'); 
         setProblemVal('Intro Problem is required!')
       }
-      if(template.intro.introBenefit < 1) {
+      if(quillText.introBenefit === '\n') {
         setIsBenefitError('error'); 
         setBenefitVal('Intro Benefit is required!')
       }
@@ -55,7 +65,7 @@ const Intro = ({state, stepper}) => {
                 help={problemVal}
                 validateStatus={isProblemError}
                 >
-                    <Input.TextArea rows={4} value={template.intro.problem} onChange={(e) => { handleUpdate(e.target.value, 'problem')}}/>
+                    <SectionEditor section={"problem"} text={[quillText, setQuillText]} value={template.intro.problem} onChange={(e) => { handleUpdate(e, 'problem')}}/>
             </Form.Item>
             <Row justify='center'><AiAssist handleUpdate={handleUpdate} templateEvent={'problem'}/></Row>
             
@@ -64,7 +74,7 @@ const Intro = ({state, stepper}) => {
                 help={benefitVal}
                 validateStatus={isBenefitError}
                 >
-                    <Input.TextArea  rows={4} value={template.intro.introBenefit} onChange={(e) => { handleUpdate(e.target.value, 'introBenefit')}}/>
+                    <SectionEditor section={"introBenefit"} text={[quillText, setQuillText]} value={template.intro.introBenefit} onChange={(e) => { handleUpdate(e, 'introBenefit')}}/>
             </Form.Item>
             <Row justify='center'><AiAssist handleUpdate={handleUpdate} templateEvent={'introBenefit'}/></Row>
         

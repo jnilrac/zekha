@@ -1,12 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import ReactQuill, {Quill, handlers} from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { Divider, Input, Row } from 'antd';
+import { Divider, Input, Row, Button, Col, Space } from 'antd';
 
-const Editor = ({post,uid, state, submitButton}) => {
+const Editor = ({post,uid, state, submitButton, stepper}) => {
   const [template, setTemplate] = state;
   const [finalPost, setFinalPost] = post;
   const [ submitDisabled, setSubmitDisabled ] = submitButton;
+  const [step, setStep] = stepper;
  console.log(uid)
 
  if(submitDisabled){
@@ -25,7 +26,7 @@ const Editor = ({post,uid, state, submitButton}) => {
         const clearBenefit = `<p>${sub.clearBenefit}</p>`;
         const actionItems = `<p>${sub.actionItems}</p>`
         return (
-          `${subheadingImage}
+          `<div class="hello">${subheadingImage}</div>
           <br />
            ${subheadingTitle}
            <br />
@@ -42,8 +43,7 @@ const Editor = ({post,uid, state, submitButton}) => {
 
       return (
        `
-        ${heroimage}
-        <br />
+      
         ${introProblem}
         <br />
         ${introBenefit}
@@ -73,14 +73,14 @@ function insertToEditor(url) {
     'header',
     'bold', 'italic', 'underline', 'strike', 'blockquote',
     'list', 'bullet', 'indent',
-    'link', 
+    'link','image '
   ]
   const modules = {
     toolbar: [
       [{ 'header': [1, 2,3,4, false] }],
       ['bold', 'italic', 'underline','strike', 'blockquote'],
       [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
-      ['link', 'video'], [{ 'align': [] }],
+      ['link', 'video','image'], [{ 'align': [] }],
       ['clean']
     ],
     
@@ -93,8 +93,17 @@ useEffect(()=>{
 },[value])
   return (
     <>
+    <Row justify='center'> 
+    <Space>
+        <Col >
+        <Button size="large" onClick={() =>{setStep(3)}} type="primary">Prev</Button>
+        </Col>
+    </Space>
+    </Row>
+     <Divider />
     <Row justify='center'><h1>{template.title.topic}</h1></Row>
     <Divider />
+    <Row justify='center'><img style={{maxWidth:600, paddingBottom:50}} src={template.heroImage.url} /></Row>
     <ReactQuill ref={quillRef} theme="snow" modules={modules}  value={value} onChange={setValue} />
     </>
     
