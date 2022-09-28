@@ -3,6 +3,7 @@ import {Form,Input, Select, Row, Button, Col, Radio, Divider} from 'antd';
 import {useImmer} from "use-immer";
 import { functions } from '../../../../../services/firebase';
 import { getFunctions, httpsCallable } from "firebase/functions";
+import { LIST_IGNORE } from 'antd/lib/upload/Upload';
 const {Option} = Select;
 
 const AiAssistListicle = ({update,assistShow,templateEvent}) => {
@@ -28,13 +29,93 @@ const AiAssistListicle = ({update,assistShow,templateEvent}) => {
   const [ promptData, setPromptData ] = useState('');
   const [localData, setLocalData] = useImmer({});
   const {topic, paragraphCount, wordCount, listNum, keywords} = localData;
+  //validation
+  const [isTopicError, setIsTopicError] = useState('');
+  const [topicVal, setTopicVal] = useState('');
+  const [isListNumError, setIsListNumError] = useState('');
+  const [listNumVal, setListNumVal] = useState('');
+  const [isParagraphCountError, setIsParagraphCountError ] = useState('');
+  const [ paragraphCountVal, setParagraphCountVal ] = useState('');
+  const [ isWordCountError, setIsWordCountError ] = useState('');
+  const [ wordCountVal, setWordCountVal ] = useState('');
+  const [ isKeywordError, setIsKeywordError ] = useState('');
+  const [keywordVal, setKeywordVal] = useState('');
+
+  const validateTitle =  () => {
+    if(!topic || !listNum) {
+      if(!topic) {
+        setIsTopicError('error');
+        setTopicVal("Title is Required!");
+        
+      }
+      if(!listNum){
+        setIsListNumError('error');
+        setListNumVal("Item Count is required!");
+        
+      }
+      return;
+    }
+    sendPrompt();
+  };
+
+  const validateSubheadingTitle = () =>{
+    if(!topic) {
+      setIsTopicError('error');
+      setTopicVal('Topic is required!')
+      return;
+    }
+    sendPrompt();
+  };
+
+  const validate = () => {
+    if( !topic || !paragraphCount || !wordCount ) {
+      if(!topic){
+        setIsTopicError('error');
+        setTopicVal("Title is Required!");
+        console.log("no Topic")
+      }
+      if(!paragraphCount){
+        setIsParagraphCountError('error');
+        setParagraphCountVal('Paragraph Count is required!');
+        console.log("no Para Count")
+      }
+      if(!wordCount){
+        setIsWordCountError('error');
+        setWordCountVal('Word Count is required!');
+        console.log("no word Count")
+      }
+      return;
+    }
+  
+    sendPrompt();
+  };
 
   const handleUpdate = (event, eventType) => {
-    if (eventType === 'topic') setLocalData(draft => {draft.topic = event.target.value})
-    else if (eventType === 'paragraphCount') setLocalData(draft => {draft.paragraphCount = event})
-    else if (eventType === 'wordCount') setLocalData(draft => {draft.wordCount = event})
-    else if (eventType === 'listNum') setLocalData(draft => {draft.listNum = event})
-    else if (eventType === 'keywords') setLocalData(draft => {draft.keywords = event.target.value})
+    if (eventType === 'topic') {
+      setIsTopicError('');
+      setTopicVal('');
+      setLocalData(draft => {draft.topic = event.target.value});
+    }
+    else if (eventType === 'paragraphCount') {
+      setIsParagraphCountError('');
+      setParagraphCountVal('');
+      setLocalData(draft => {draft.paragraphCount = event});
+    }
+    else if (eventType === 'wordCount') {
+      setIsWordCountError('');
+      setWordCountVal('');
+      setLocalData(draft => {draft.wordCount = event});
+    }
+    else if (eventType === 'listNum') {
+      setIsListNumError('');
+      setListNumVal('');
+      setLocalData(draft => {draft.listNum = event});
+    }
+    else if (eventType === 'keywords') {
+      setIsKeywordError('');
+      setKeywordVal('');
+      setLocalData(draft => {draft.keywords = event.target.value});
+    }
   };
   //firebase Callable Functions
   const completionsCall = async () => {
@@ -50,6 +131,7 @@ const AiAssistListicle = ({update,assistShow,templateEvent}) => {
   
 
   const sendPrompt = () => {
+  
     if(templateEvent === "topic") {
       setPromptData(`Write blog post title, with proper capitalization, and with two adjectives decribing a list of ${listNum} ${topic}.`)
       completionsCall();
@@ -57,7 +139,7 @@ const AiAssistListicle = ({update,assistShow,templateEvent}) => {
       let paraCount;
       if(paragraphCount > 1) {paraCount = "paragraphs"}
       else {paraCount = 'paragraph'}
-      setPromptData(`write ${wordCount} words in ${paragraphCount} ${paraCount} about why ${topic} is a problem.`)
+      setPromptData(`write ${wordCount} words in ${paragraphCount} ${paraCount} about why ${topic} is a problem and use the following comma separated keywords:${keywords}`)
       completionsCall();
     } else if (templateEvent === "introBenefit")  {
       let paraCount;
@@ -102,7 +184,7 @@ const AiAssistListicle = ({update,assistShow,templateEvent}) => {
         let paraCount;
         if(paragraphCount > 1) {paraCount = "paragraphs"}
         else {paraCount = 'paragraph'}
-        setPromptData(`write ${wordCount} words in ${paragraphCount} ${paraCount} about why ${topic} is a problem.`)
+        setPromptData(`write ${wordCount} words in ${paragraphCount} ${paraCount} about why ${topic} is a problem and use the following comma separated keywords:${keywords}`)
        
       } else if (templateEvent === "introBenefit")  {
         let paraCount;
@@ -133,6 +215,8 @@ const AiAssistListicle = ({update,assistShow,templateEvent}) => {
         
       }
      }, [topic, wordCount, paragraphCount, listNum])
+
+
      if(templateEvent === "subheadingTitle") {
       return(
         <Row >
@@ -141,16 +225,30 @@ const AiAssistListicle = ({update,assistShow,templateEvent}) => {
              <center><p>Separate each keyword or phrase with a comma.</p></center>
           </Col>
           <Col style={{marginBottom:20}} span={24}>
-               <Input value={keywords} onChange={e => {handleUpdate(e, "keywords")}}/>
+            <Form.Item
+            label="Keywords"
+            help={keywordVal}
+            validateStatus={isKeywordError}
+            >
+             <Input value={keywords} onChange={e => {handleUpdate(e, "keywords")}}/>
+            </Form.Item>
+               
           </Col>
           <Col style={{marginBottom:20}} span={24}>
              <center><h2>What's the topic?</h2></center>
           </Col>
           <Col style={{marginBottom:20}} span={24}>
-               <Input value={topic} onChange={e => {handleUpdate(e, "topic")}}/>
+            <Form.Item
+            label="Topic"
+            help={topicVal}
+            validateStatus={isTopicError}
+            >
+            <Input value={topic} onChange={e => {handleUpdate(e, "topic")}}/>
+            </Form.Item>
+               
           </Col>
             <Col span={24}>
-              <Row justify='center'><Button onClick={sendPrompt}>Run Ai</Button></Row>
+              <Row justify='center'><Button onClick={validateSubheadingTitle}>Run Ai</Button></Row>
             </Col>
         </Row>
       );
@@ -163,16 +261,30 @@ const AiAssistListicle = ({update,assistShow,templateEvent}) => {
              <center><h2>How many items are in this list?</h2></center>
           </Col>
           <Col style={{marginBottom:20}} span={24}>
-               <Select style={{width:"100%"}} value={listNum} onChange={e => {handleUpdate(e,"listNum")}}>{titleItemOptions}</Select>
+            <Form.Item
+            label="List Items"
+            help={listNumVal}
+            validateStatus={isListNumError}
+            >
+             <Select style={{width:"100%"}} value={listNum} onChange={e => {handleUpdate(e,"listNum")}}>{titleItemOptions}</Select>
+            </Form.Item>
+               
           </Col>
           <Col style={{marginBottom:20}} span={24}>
              <center><h2>What's the topic?</h2></center>
           </Col>
           <Col style={{marginBottom:20}} span={24}>
-               <Input value={topic} onChange={e => {handleUpdate(e, "topic")}}/>
+            <Form.Item
+            label="Topic"
+            help={topicVal}
+            validateStatus={isTopicError}
+            >
+              <Input value={topic} onChange={e => {handleUpdate(e, "topic")}}/>
+            </Form.Item>
+               
           </Col>
             <Col span={24}>
-              <Row justify='center'><Button onClick={sendPrompt}>Run Ai</Button></Row>
+              <Row justify='center'><Button onClick={validateTitle}>Run Ai</Button></Row>
             </Col>
         </Row>
        
@@ -186,7 +298,14 @@ const AiAssistListicle = ({update,assistShow,templateEvent}) => {
                 <center><p>Separate each keyword or phrase with a comma.</p></center>
             </Col>
           <Col style={{marginBottom:20}} span={24}>
-               <Input value={keywords} onChange={e => {handleUpdate(e, "keywords")}}/>
+            <Form.Item
+            label="Keywords"
+            help={keywordVal}
+            validateStatus={isKeywordError}
+            >
+             <Input value={keywords} onChange={e => {handleUpdate(e, "keywords")}}/>
+            </Form.Item>
+               
           </Col>
                   
             <Col  style={{marginBottom:20}} span={24}>
@@ -194,24 +313,45 @@ const AiAssistListicle = ({update,assistShow,templateEvent}) => {
             </Col>
 
             <Col  style={{marginBottom:20}} span={24}>
+              <Form.Item
+              label="Word Count"
+              help={wordCountVal}
+              validateStatus={isWordCountError}
+              >
                 <Select style={{width:"100%"}} value={wordCount} onChange={e => {handleUpdate(e,"wordCount")}}>{wordCountOptions}</Select>
+              </Form.Item>
+               
             </Col>
                   
             <Col  style={{marginBottom:20}} span={24}>
               <h2>Paragraph Count:</h2>
             </Col>
             <Col  style={{marginBottom:20}} span={24}>
+              <Form.Item
+              label="Paragraph Count"
+              help={paragraphCountVal}
+              validateStatus={isParagraphCountError}
+              >
                 <Select style={{width:"100%"}} value={paragraphCount} onChange={e => {handleUpdate(e,"paragraphCount")}}>{paragraphOptions}</Select>
+              </Form.Item>
+                
             </Col>
           
           <Col  style={{marginBottom:20}} span={24}>
           <h2>What's the topic?</h2>
           </Col>
           <Col  style={{marginBottom:20}} span={24}>
-              <Input value={topic} onChange={e => {handleUpdate(e, "topic")}}/>
+            <Form.Item
+            label="Topic"
+            help={topicVal}
+            validateStatus={isTopicError}
+            >
+             <Input value={topic} onChange={e => {handleUpdate(e, "topic")}}/>
+            </Form.Item>
+              
           </Col>
           
-              <Row justify='center'><Button onClick={sendPrompt}>Run Ai</Button></Row>
+              <Row justify='center'><Button onClick={validate}>Run Ai</Button></Row>
           
         </Row>
         </Col>
@@ -266,10 +406,22 @@ const AiAssistListicle = ({update,assistShow,templateEvent}) => {
 
 
   const Summarization = () => {
+    const [ isKeywordError, setIsKeywordError ] = useState('');
+    const [keywordVal, setKeywordVal] = useState('');
+    const [isTextError, setIsTextError] = useState('');
+    const [ textVal, setTextVal ] = useState('');
     const [summary, setSummary] = useImmer({});
     const {text, keywords} =  summary;
- 
 
+    // Validation
+    const validate = () => {
+      if(!text){
+        setIsTextError('error');
+        setTextVal('Please enter text to be summarized.')
+        return;
+      }
+      sendSummary()
+    }
 
 
     //firebase Callable Function
@@ -281,8 +433,16 @@ const AiAssistListicle = ({update,assistShow,templateEvent}) => {
   }   
 
     const handleSummaryUpdate = (event, eventType) => {
-      if (eventType === 'summary') setSummary(draft => {draft.text = event.target.value});
-      if (eventType === 'keywords') setSummary(draft => {draft.keywords = event.target.value})
+      if (eventType === 'summary') {
+        setIsTextError('');
+        setTextVal('');
+        setSummary(draft => {draft.text = event.target.value});
+      }
+      if (eventType === 'keywords') {
+        setIsKeywordError('');
+        setKeywordVal('');
+        setSummary(draft => {draft.keywords = event.target.value})
+      }
       
     }
   
@@ -299,17 +459,31 @@ const AiAssistListicle = ({update,assistShow,templateEvent}) => {
              <center><p>Separate each keyword or phrase with a comma.</p></center>
           </Col>
           <Col style={{marginBottom:20}} span={24}>
-               <Input value={keywords} onChange={e => {handleSummaryUpdate(e, "keywords")}}/>
+            <Form.Item
+            label="Keywords"
+            help={keywordVal}
+            validateStatus={isKeywordError}
+            >
+              <Input value={keywords} onChange={e => {handleSummaryUpdate(e, "keywords")}}/>
+            </Form.Item>
+               
           </Col>
             <Col span={24}>
             <p>Paste text you want to summarize here.</p>
             </Col>
             <Col span={24}>
-              <Input.TextArea rows={10} value={text} onChange={e => {handleSummaryUpdate(e, "summary")}}/>
+              <Form.Item
+              label="Text to Summarize"
+              help={textVal}
+              validateStatus={isTextError}
+              >
+               <Input.TextArea rows={10} value={text} onChange={e => {handleSummaryUpdate(e, "summary")}}/>
+              </Form.Item>
+              
 
             </Col>
             <Col  span={24}>
-            <Row style={{margin:20}} justify='center'><Button onClick={sendSummary}>Run Ai</Button></Row>
+            <Row style={{margin:20}} justify='center'><Button onClick={validate}>Run Ai</Button></Row>
             </Col>
           </Row>
         </div>
